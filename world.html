@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мир — Ель Миу Азхар</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- ЗВУКИ (должны лежать в папке sounds/) -->
+  <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
+  <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
+
+  <style>
+    /* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+    body {
+      margin: 0; padding: 0; height: 100vh; overflow-x: hidden;
+      display: flex; flex-direction: column; font-family: 'Montserrat', sans-serif;
+      background-color: #050505; color: #fff; box-sizing: border-box;
+    }
+    * { box-sizing: border-box; }
+    .page-wrapper {
+      display: flex; width: 100%; height: 100%; overflow: hidden; position: relative;
+    }
+
+    /* --- САЙДБАР --- */
+    .sidebar {
+      width: 260px; height: 100%; background: #0b0b0b; padding: 40px 20px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      flex-shrink: 0; z-index: 10; border-right: 1px solid rgba(255,255,255,0.05);
+    }
+    .logo-wrapper {
+      margin-bottom: 30px; opacity: 0; transform: translateY(-20px);
+      animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .site-logo {
+      max-width: 100%; height: auto;
+      filter: drop-shadow(0 0 15px rgba(209, 177, 128, 0.4));
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .logo-wrapper img { animation: logoFloat 6s ease-in-out infinite; }
+
+    .nav-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .nav-link {
+      text-decoration: none; color: rgba(255, 255, 255, 0.5);
+      font-family: 'Cormorant Garamond', serif; font-size: 0.9rem;
+      text-transform: uppercase; letter-spacing: 2px; padding: 5px 0;
+      transition: all 0.3s ease;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #d1b180; padding-left: 10px;
+    }
+
+    .social-row {
+      display: flex; justify-content: center; align-items: center; gap: 15px;
+      margin-top: auto; flex-wrap: nowrap;
+    }
+    .social-icon-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .social-icon-btn img {
+      width: 24px; height: 24px; object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+    .social-icon-btn:hover {
+      background: #d1b180; transform: scale(1.1) rotate(10deg);
+      border-color: #d1b180;
+    }
+    .social-icon-btn:hover img { filter: brightness(0) invert(0); }
+
+    /* --- КОНТЕНТ --- */
+    .main-content {
+      flex-grow: 1; background: #050505; padding: 60px 50px;
+      overflow-y: auto; position: relative; display: flex; flex-direction: column;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 3.5rem;
+      color: white; margin: 0 0 20px 0; line-height: 1.1;
+      text-shadow: 0 0 20px rgba(0,0,0,0.5);
+      opacity: 0; transform: translateY(30px);
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+    }
+
+    .world-intro {
+      color: rgba(255,255,255,0.7); font-size: 1.1rem; max-width: 700px;
+      line-height: 1.6; margin-bottom: 40px;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+    }
+
+    .lore-section {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 40px; margin-bottom: 50px;
+    }
+    .lore-title {
+      color: white; font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; margin-bottom: 20px;
+    }
+    .lore-item {
+      display: grid; grid-template-columns: 80px 1fr; gap: 20px;
+      align-items: start; margin-bottom: 30px;
+    }
+    .lore-icon {
+      grid-row: 1 / -1; display: flex; align-items: center; justify-content: center;
+      color: #d1b180; font-weight: 700; font-size: 1.5rem;
+    }
+    .lore-text h3 {
+      color: #d1b180; margin: 0 0 8px 0; font-family: 'Cormorant Garamond', serif;
+    }
+    .lore-text p {
+      color: rgba(255,255,255,0.65); margin: 0; font-size: 0.95rem; line-height: 1.5;
+    }
+
+    .map-placeholder {
+      background: rgba(26, 26, 36, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(205, 163, 110, 0.2);
+      padding: 40px; text-align: center;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.0s forwards;
+    }
+    .map-placeholder h3 {
+      color: #d1b180; font-family: 'Cormorant Garamond', serif; margin-bottom: 12px;
+    }
+    .map-placeholder p {
+      color: rgba(255,255,255,0.6); font-size: 0.95rem;
+    }
+
+    .cta-block {
+      margin-top: auto; text-align: center;
+      opacity: 0; animation: fadeIn 0.8s ease-out 1.1s forwards;
+    }
+    .order-btn {
+      background: transparent; border: 2px solid #d1b180;
+      color: #d1b180; padding: 14px 40px; text-decoration: none;
+      text-transform: uppercase; font-weight: 700; letter-spacing: 1px;
+      cursor: pointer; transition: all 0.3s ease;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .order-btn:hover {
+      background: #d1b180; color: #000;
+      box-shadow: 0 0 20px rgba(209, 177, 128, 0.3);
+    }
+
+    @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* МОДАЛЬНОЕ ОКНО */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9); display: none;
+      justify-content: center; align-items: center; z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: #111; padding: 30px; border: 1px solid #d1b180;
+      text-align: center; max-width: 500px; width: 90%;
+    }
+    .modal-close {
+      position: absolute; top: 15px; right: 20px; background: none; border: none;
+      color: rgba(255,255,255,0.5); font-size: 2rem; cursor: pointer;
+    }
+    .payment-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;
+    }
+    .payment-btn {
+      background: transparent; border: 1px solid #d1b180;
+      color: #d1b180; padding: 12px; text-decoration: none;
+      text-transform: uppercase; font-weight: 700; transition: 0.3s;
+      text-align: center; display: block;
+    }
+    .payment-btn:hover {
+      background: #d1b180; color: #000;
+      box-shadow: 0 0 15px rgba(209, 177, 128, 0.4);
+    }
+
+    /* АДАПТИВ */
+    @media (max-width: 768px) {
+      .page-wrapper { flex-direction: column; }
+      .sidebar {
+        width: 100%; height: auto; padding: 20px;
+        flex-direction: row; justify-content: space-between;
+        align-items: center; flex-wrap: wrap; gap: 20px;
+        order: -1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+      .logo-wrapper { margin-bottom: 0; order: 1; }
+      .nav-list {
+        flex-direction: row; gap: 15px; margin-top: 10px;
+        flex-grow: 1; justify-content: center; order: 2;
+      }
+      .social-row {
+        margin-top: 0; justify-content: center; width: 100%; order: 3;
+      }
+      .main-content { padding: 30px 20px; }
+      .hero-title { font-size: 2.2rem; }
+      .skills-grid, .lore-section, .map-placeholder { grid-template-columns: 1fr; }
+      .lore-item { grid-template-columns: auto 1fr; gap: 12px; }
+      .payment-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+      <div class="logo-wrapper">
+        <img src="img/logo.png" alt="Ель Миу Азхар" class="site-logo" onerror="this.style.display='none'" />
+      </div>
+      <nav>
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Главная</a></li>
+          <li><a href="gallery.html" class="nav-link">Галерея</a></li>
+          <li><a href="services.html" class="nav-link">Услуги</a></li>
+          <li><a href="world.html" class="nav-link active">Мир</a></li>
+          <li><a href="character.html" class="nav-link">Персонаж</a></li>
+          <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
+          <li><a href="about.html" class="nav-link">Обо мне</a></li>
+        </ul>
+      </nav>
+      <div class="social-row">
+        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn"><img src="img/twitch.png" alt="Twitch" /></a>
+        <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn"><img src="img/telegram.png" alt="Telegram" /></a>
+        <a href="https://www.youtube.com/@elmiuazhar" target="_blank" class="social-icon-btn"><img src="img/youtube.png" alt="YouTube" /></a>
+        <a href="https://www.tiktok.com/@elmiuazhar?is_from_webapp=1&sender_device=pc" target="_blank" class="social-icon-btn"><img src="img/tiktok.png" alt="TikTok" /></a>
+      </div>
+    </aside>
+
+    <!-- ПРАВАЯ ЧАСТЬ -->
+    <main class="main-content">
+      <h1 class="hero-title">Мир</h1>
+
+      <p class="world-intro">
+        Этот мир — не просто фон для персонажей. Это система смыслов, где мифология встречается с технологиями, а древние символы становятся частью цифровой культуры. Здесь у каждой локации есть своя логика, у каждого народа — своя эстетика, и даже у теней есть своя история.
+      </p>
+            <section class="lore-section">
+        <h2 class="lore-title">Слои мира</h2>
+
+        <div class="lore-item">
+          <div class="lore-icon">I</div>
+          <div class="lore-text">
+            <h3>Нижний слой: руины и коды</h3>
+            <p>Здесь остались следы старых цивилизаций — каменные барельефы, покрытые цифровыми метками. Технологии не вытеснили прошлое, а вросли в него: провода тянутся по колоннам, экраны мерцают среди обломков храмов. В этом слое часто ищут вдохновение для VTuber‑моделей с «древним» вайбом — когда в дизайне персонажа читается история тысячелетий.</p>
+          </div>
+        </div>
+
+        <div class="lore-item">
+          <div class="lore-icon">II</div>
+          <div class="lore-text">
+            <h3>Средний слой: города и рынки</h3>
+            <p>Живые кварталы, где ремесленники продают 3D‑модели, а уличные музыканты играют на гибридных инструментах. Это сердце мира: здесь всё смешивается — стили, эпохи, языки. Именно отсюда чаще всего берут заказы на VTuber‑модели и иллюстрации. Тут же проходят стримы и съёмки коротких роликов — локации идеально подходят для контента под YouTube и Shorts.</p>
+          </div>
+        </div>
+
+        <div class="lore-item">
+          <div class="lore-icon">III</div>
+          <div class="lore-text">
+            <h3>Верхний слой: облака и сигналы</h3>
+            <p>Пространство потоков данных и визуальных образов. Здесь рождаются тренды, формируются стили и расходятся сигналы по всем платформам. Для тебя это самое близкое: именно в этом слое живёт мультиплатформенный контент, аналитика просмотров и алгоритмы рекомендаций. Тут можно «упаковать» свою систему обучения: показать, как логика, математика и психология складываются в стратегию роста аудитории.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="map-placeholder">
+        <h3>Карта мира</h3>
+        <p>Это место для визуализации: здесь может быть SVG‑карта, интерактивная схема слоёв или даже анимированная проекция. Пока это заглушка, но ты легко сможешь вставить сюда свой арт — например, стилизованную карту в духе «мифология + киберпанк», которую нарисуешь в FL Studio как концепт‑арт или соберёшь из нескольких слоёв в графическом редакторе.</p>
+      </div>
+
+      <section class="vision-section">
+        <h2 class="vision-title" style="color: white; font-family: 'Cormorant Garamond', serif; margin-bottom: 20px;">Как этот мир помогает в контенте</h2>
+        <p style="color: rgba(255,255,255,0.7); line-height: 1.6;">
+          Этот лор — не просто «красивые слова». Его можно использовать как базу для контента:
+        </p>
+        <ul style="color: rgba(255,255,255,0.65); margin-bottom: 30px; padding-left: 20px;">
+          <li>Стримы: «Создаю VTuber‑модель для Нижнего слоя — делаю упор на древние символы и глитч‑эффекты».</li>
+          <li>Shorts: «Как выглядит город Среднего слоя в 3 разных стилях — показываю 3 скетча за 60 секунд».</li>
+          <li>YouTube: «Строю свою вселенную: как мифология и киберпанк влияют на дизайн персонажей».</li>
+          <li>Аналитика: «Сравниваю, какой стиль (древний, городской, цифровой) лучше заходит в Shorts и на Twitch».</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+  <script>
+    // --- ЗВУКИ ---
+    const soundClick = document.getElementById('sound-click');
+    const soundHover = document.getElementById('sound-hover');
+
+    if (soundClick) soundClick.volume = 0.3;
+    if (soundHover) soundHover.volume = 0.3;
+
+    function playClick() {
+      if (!soundClick || !soundClick.src) return;
+      soundClick.currentTime = 0;
+      soundClick.play().catch(() => {});
+    }
+
+    function playHover() {
+      if (!soundHover || !soundHover.src) return;
+      soundHover.currentTime = 0;
+      soundHover.play().catch(() => {});
+    }
+
+    // Вешаем звуки на все интерактивные элементы
+    const interactiveElements = document.querySelectorAll(
+      'button, .order-btn, .payment-btn, .nav-link, .social-icon-btn'
+    );
+
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', playHover);
+      el.addEventListener('mousedown', playClick);
+    });
+
+    // --- МОДАЛЬНОЕ ОКНО ---
+    const openBtn = document.getElementById('open-payment');
+    const closeBtn = document.getElementById('close-payment');
+    const modal = document.getElementById('payment-modal');
+
+    if (openBtn) {
+      openBtn.addEventListener('click', () => {
+        modal.classList.add('active');
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

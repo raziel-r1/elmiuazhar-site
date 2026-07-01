@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Обо мне — Ель Миу Азхар</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- ЗВУКИ (должны лежать в папке sounds/) -->
+  <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
+  <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
+
+  <style>
+    /* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #050505;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    * { box-sizing: border-box; }
+    .page-wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* --- САЙДБАР --- */
+    .sidebar {
+      width: 260px;
+      height: 100%;
+      background: #0b0b0b;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-shrink: 0;
+      z-index: 10;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+    .logo-wrapper {
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .site-logo {
+      max-width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 15px rgba(209, 177, 128, 0.4));
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .logo-wrapper img { animation: logoFloat 6s ease-in-out infinite; }
+
+    .nav-list {
+      list-style: none;
+      padding: 0; margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .nav-link {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 5px 0;
+      transition: all 0.3s ease;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #d1b180;
+      padding-left: 10px;
+    }
+
+    .social-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: auto;
+      flex-wrap: nowrap;
+    }
+    .social-icon-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .social-icon-btn img {
+      width: 24px; height: 24px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+    .social-icon-btn:hover {
+      background: #d1b180;
+      transform: scale(1.1) rotate(10deg);
+      border-color: #d1b180;
+    }
+    .social-icon-btn:hover img { filter: brightness(0) invert(0); }
+
+    /* --- КОНТЕНТ --- */
+    .main-content {
+      flex-grow: 1;
+      background: #050505;
+      padding: 60px 50px;
+      overflow-y: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      color: white;
+      margin: 0 0 20px 0;
+      line-height: 1.1;
+      text-shadow: 0 0 20px rgba(0,0,0,0.5);
+      opacity: 0; transform: translateY(30px);
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+    }
+
+    .about-intro {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.1rem;
+      max-width: 700px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    .skill-card {
+      background: rgba(26, 26, 36, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(205, 163, 110, 0.2);
+      padding: 20px;
+      border-radius: 8px;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .skill-card:nth-child(1) { animation-delay: 0.6s; }
+    .skill-card:nth-child(2) { animation-delay: 0.7s; }
+    .skill-card:nth-child(3) { animation-delay: 0.8s; }
+    .skill-card:nth-child(4) { animation-delay: 0.9s; }
+    .skill-card:hover {
+      transform: translateY(-5px) scale(1.01);
+      border-color: #d1b180;
+    }
+
+    .skill-card h3 {
+      color: #d1b180;
+      margin: 0 0 12px 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+    }
+    .skill-card p {
+      color: rgba(255,255,255,0.6);
+      margin: 0; font-size: 0.95rem; line-height: 1.5;
+    }
+
+    .vision-section {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 40px;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeIn 0.8s ease-out 1.0s forwards;
+    }
+    .vision-title {
+      color: white; font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; margin-bottom: 20px;
+    }
+    .vision-text {
+      color: rgba(255,255,255,0.65);
+      max-width: 700px; line-height: 1.6;
+    }
+
+    .cta-block {
+      margin-top: auto; text-align: center;
+      opacity: 0; animation: fadeIn 0.8s ease-out 1.1s forwards;
+    }
+    .order-btn {
+      background: transparent; border: 2px solid #d1b180;
+      color: #d1b180; padding: 14px 40px; text-decoration: none;
+      text-transform: uppercase; font-weight: 700; letter-spacing: 1px;
+      cursor: pointer; transition: all 0.3s ease;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .order-btn:hover {
+      background: #d1b180; color: #000;
+      box-shadow: 0 0 20px rgba(209, 177, 128, 0.3);
+    }
+
+    @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* МОДАЛЬНОЕ ОКНО */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9); display: none;
+      justify-content: center; align-items: center; z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: #111; padding: 30px; border: 1px solid #d1b180;
+      text-align: center; max-width: 500px; width: 90%;
+    }
+    .modal-close {
+      position: absolute; top: 15px; right: 20px; background: none; border: none;
+      color: rgba(255,255,255,0.5); font-size: 2rem; cursor: pointer;
+    }
+    .payment-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;
+    }
+    .payment-btn {
+      background: transparent; border: 1px solid #d1b180;
+      color: #d1b180; padding: 12px; text-decoration: none;
+      text-transform: uppercase; font-weight: 700; transition: 0.3s;
+      text-align: center; display: block;
+    }
+    .payment-btn:hover {
+      background: #d1b180; color: #000;
+      box-shadow: 0 0 15px rgba(209, 177, 128, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .page-wrapper { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; padding: 20px; flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; order: -1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .logo-wrapper { margin-bottom: 0; order: 1; }
+      .nav-list { flex-direction: row; gap: 15px; margin-top: 10px; flex-grow: 1; justify-content: center; order: 2; }
+      .social-row { margin-top: 0; justify-content: center; width: 100%; order: 3; }
+      .main-content { padding: 30px 20px; }
+      .hero-title { font-size: 2.2rem; }
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+      <div class="logo-wrapper">
+        <img src="img/logo.png" alt="Ель Миу Азхар" class="site-logo" onerror="this.style.display='none'" />
+      </div>
+      <nav>
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Главная</a></li>
+          <li><a href="gallery.html" class="nav-link">Галерея</a></li>
+          <li><a href="services.html" class="nav-link">Услуги</a></li>
+          <li><a href="world.html" class="nav-link">Мир</a></li>
+          <li><a href="character.html" class="nav-link">Персонаж</a></li>
+          <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
+          <li><a href="about.html" class="nav-link active">Обо мне</a></li>
+        </ul>
+      </nav>
+      <div class="social-row">
+        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn"><img src="img/twitch.png" alt="Twitch" /></a>
+        <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn"><img src="img/telegram.png" alt="Telegram" /></a>
+        <a href="https://www.youtube.com/@elmiuazhar" target="_blank" class="social-icon-btn"><img src="img/youtube.png" alt="YouTube" /></a>
+        <a href="https://www.tiktok.com/@elmiuazhar?is_from_webapp=1&sender_device=pc" target="_blank" class="social-icon-btn"><img src="img/tiktok.png" alt="TikTok" /></a>
+      </div>
+    </aside>
+    
+    <!-- ПРАВАЯ ЧАСТЬ -->
+     <!-- ПРАВАЯ ЧАСТЬ -->
+    <main class="main-content">
+      <h1 class="hero-title">Обо мне</h1>
+
+      <p class="about-intro">
+        Меня зовут Мия, я создаю персонажей, VTuber-модели и иллюстрации. Для меня творчество — это не просто «рисовать красиво», а часть большой системы: я совмещаю логику и эстетику, программирование и искусство, музыку и визуал. Мой стиль — мифология плюс киберпанк, где древние символы встречаются с цифровой культурой.
+      </p>
+
+      <section class="skills-grid">
+        <article class="skill-card">
+          <h3>Рисование и дизайн</h3>
+          <p>Работаю с референсами, композицией, цветом и светом. Делаю VTuber-модели (от скетча до full body), иллюстрации в смешанной стилистике. Люблю соединять «старое» (орнаменты, мифологию) и «новое» (цифровые эффекты, глитч, неоновое свечение).</p>
+        </article>
+
+        <article class="skill-card">
+          <h3>Музыка и звук</h3>
+          <p>Пишу музыку в FL Studio, играю на фортепиано. Понимаю, как звук влияет на атмосферу работы: иногда подбираю референс-трек под арт, чтобы выдержать настроение. Это помогает делать проекты более цельными.</p>
+        </article>
+
+        <article class="skill-card">
+          <h3>Системное мышление</h3>
+          <p>Учусь по собственной системе: логика, математика, информатика, психология, обществознание и др. Такой подход помогает не только придумывать идеи, но и упаковывать их в понятную структуру: от концепции персонажа до плана контента для YouTube/Twitch.</p>
+        </article>
+
+        <article class="skill-card">
+          <h3>Контент и платформы</h3>
+          <p>Планирую мультиплатформенный контент (YouTube, Twitch, Shorts). Хочу показывать не только готовые работы, но и процесс: скетчи, сборку модели, написание трека. Для меня важно, чтобы зритель видел, как рождается идея.</p>
+        </article>
+      </section>
+
+      <section class="vision-section">
+        <h2 class="vision-title">Моя цель</h2>
+        <p class="vision-text">
+          Сделать творчество полноценной работой, где каждая часть усиливает другую: арт, музыка, контент, аналитика. Хочу, чтобы мои проекты ощущались как «вселенная» — с историей, правилами и узнаваемой эстетикой. И при этом оставаться понятной для зрителя: показывать процесс, объяснять решения, делиться тем, что вдохновляет.
+        </p>
+      </section>
+    </main>
+  </div>
+  <!-- ЗВУКИ (должны лежать в папке sounds/) -->
+  <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
+  <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
+
+  <script>
+    const clickAudio = document.getElementById('sound-click');
+    const hoverAudio = document.getElementById('sound-hover');
+
+    // Функция безопасного воспроизведения звука (учитывает политику браузеров)
+    function playSound(audio) {
+      if (!audio) return;
+      audio.currentTime = 0; // перезапуск с начала
+      audio.play().catch(e => console.log('Автовоспроизведение заблокировано браузером (нормально до первого клика)'));
+    }
+
+    // Элементы, на которых будут звуки
+    const interactiveElements = document.querySelectorAll(
+      '.nav-link, .social-icon-btn, .order-btn, .payment-btn, .modal-close'
+    );
+
+    interactiveElements.forEach(el => {
+      // Звук при наведении
+      el.addEventListener('mouseenter', () => {
+        playSound(hoverAudio);
+      });
+
+      // Звук при клике
+      el.addEventListener('click', () => {
+        playSound(clickAudio);
+      });
+    });
+
+    // Модальное окно
+    const openBtn = document.getElementById('open-payment');
+    const closeBtn = document.getElementById('close-payment');
+    const modal = document.getElementById('payment-modal');
+
+    if (openBtn) {
+      openBtn.addEventListener('click', () => {
+        modal.classList.add('active');
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

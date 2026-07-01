@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Персонаж: Нарет — Ель Миу Азхар</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- ЗВУКИ (должны лежать в папке sounds/) -->
+  <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
+  <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
+
+  <style>
+    /* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #050505;
+      color: #fff;
+      box-sizing: border-box;
+    }
+
+    * { box-sizing: border-box; }
+
+    .page-wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* --- ЛЕВАЯ ПАНЕЛЬ (САЙДБАР) --- */
+    .sidebar {
+      width: 260px;
+      height: 100%;
+      background: #0b0b0b;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .logo-wrapper {
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .site-logo {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 15px rgba(209, 177, 128, 0.4));
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .logo-wrapper img { animation: logoFloat 6s ease-in-out infinite; }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 5px 0;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #d1b180;
+      padding-left: 10px;
+    }
+
+    .social-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: auto;
+      flex-wrap: nowrap;
+    }
+
+    .social-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      overflow: hidden;
+    }
+
+    .social-icon-btn img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .social-icon-btn:hover {
+      background: #d1b180;
+      transform: scale(1.1) rotate(10deg);
+      border-color: #d1b180;
+    }
+
+    .social-icon-btn:hover img {
+      filter: brightness(0) invert(0);
+    }
+
+    /* --- ПРАВАЯ ЧАСТЬ (КОНТЕНТ) --- */
+    .main-content {
+      flex-grow: 1;
+      background: #050505;
+      padding: 60px 50px;
+      overflow-y: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Заголовок персонажа */
+    .char-hero {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+      margin-bottom: 40px;
+    }
+
+    .char-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      color: white;
+      margin: 0 0 10px 0;
+      line-height: 1.1;
+    }
+
+    .char-subtitle {
+      color: rgba(209, 177, 128, 0.8);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin: 0;
+    }
+
+    /* Сетка: арт + информация */
+    .character-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    .char-image-wrapper {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(209, 177, 128, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+    }
+
+    .char-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .char-info-block {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+    }
+
+    .char-desc {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 35px;
+      max-width: 550px;
+    }
+
+    /* Характеристики в стиле карточек */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 3px solid #d1b180;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    .stat-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.9s; }
+    .stat-card:nth-child(2) { animation-delay: 1.0s; }
+    .stat-card:nth-child(3) { animation-delay: 1.1s; }
+    .stat-card:nth-child(4) { animation-delay: 1.2s; }
+
+    /* Блок идей для контента */
+    .content-ideas-block {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.6s ease-out 1.3s forwards;
+    }
+
+    .ideas-heading {
+      color: #d1b180;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .idea-item {
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+
+    .idea-item strong { color: white; }
+
+    /* Кнопка CTA */
+    .cta-block {
+      margin-top: auto;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 0.8s ease-out 1.4s forwards;
+    }
+
+    .order-btn {
+      background: transparent;
+      border: 2px solid #d1b180;
+      color: #d1b180;
+      padding: 14px 40px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .order-btn:hover {
+      background: #d1b180;
+      color: #000;
+      box-shadow: 0 0 20px rgba(209, 177, 128, 0.3);
+    }
+
+    /* МОДАЛЬНОЕ ОКНО */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: #111;
+      padding: 30px;
+      border: 1px solid #d1b180;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+    .modal-close {
+      position: absolute;
+      top: 15px; right: 20px;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 2rem;
+      cursor: pointer;
+    }
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .payment-btn {
+      background: transparent;
+      border: 1px solid #d1b180;
+      color: #d1b180;
+      padding: 12px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: 0.3s;
+      text-align: center;
+      display: block;
+    }
+    .payment-btn:hover {
+      background: #d1b180;
+      color: #000;
+      box-shadow: 0 0 15px rgba(209, 177, 128, 0.4);
+    }
+
+    /* Анимации */
+    @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* Скрытие скроллбара */
+    body::-webkit-scrollbar { display: none; }
+    body { scrollbar-width: none; -ms-overflow-style: none; }
+
+    @media (max-width: 900px) {
+      .character-layout { grid-template-columns: 1fr; }
+      .char-image-wrapper { height: 420px; }
+      .sidebar { width: 220px; padding: 30px 15px; }
+      .main-content { padding: 40px 30px; }
+      .char-title { font-size: 2.5rem; }
+    }
+          .char-title { font-size: 2.5rem; }
+
+    @media (max-width: 768px) {
+      .page-wrapper { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+      .logo-wrapper { margin-bottom: 0; order: 1; }
+      .nav-list {
+        flex-direction: row;
+        gap: 15px;
+        margin-top: 10px;
+        flex-grow: 1;
+        justify-content: center;
+        order: 2;
+      }
+      .social-row {
+        margin-top: 0;
+        justify-content: center;
+        width: 100%;
+        order: 3;
+      }
+      .main-content { padding: 30px 20px; }
+      .char-title { font-size: 2rem; }
+      body::-webkit-scrollbar { display: block; }
+      body { scrollbar-width: auto; }
+    }
+  </style>
+</head>
+<body class="bg-home">
+  <div class="page-wrapper">
+    
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+      <div class="logo-wrapper">
+        <img src="img/logo.png" alt="Ель Миу Азхар" class="site-logo" onerror="this.style.display='none'">
+      </div>
+      
+      <nav>
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Главная</a></li>
+          <li><a href="gallery.html" class="nav-link">Галерея</a></li>
+          <li><a href="services.html" class="nav-link">Услуги</a></li>
+          <li><a href="world.html" class="nav-link">Мир</a></li>
+          <li><a href="character.html" class="nav-link active">Персонаж</a></li>
+          <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
+          <li><a href="about.html" class="nav-link">Обо мне</a></li>
+        </ul>
+      </nav>
+      
+      <div class="social-row">
+        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn" title="Twitch">
+          <img src="img/twitch.png" alt="Twitch" onerror="this.style.display='none'">
+        </a>
+        <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn" title="Telegram">
+          <img src="img/telegram.png" alt="Telegram" onerror="this.style.display='none'">
+        </a>
+        <a href="https://www.youtube.com/@elmiuazhar" target="_blank" class="social-icon-btn" title="YouTube">
+          <img src="img/youtube.png" alt="YouTube" onerror="this.style.display='none'">
+        </a>
+        <a href="https://www.tiktok.com/@elmiuazhar?is_from_webapp=1&sender_device=pc" target="_blank" class="social-icon-btn" title="TikTok">
+          <img src="img/tiktok.png" alt="TikTok" onerror="this.style.display='none'">
+        </a>
+      </div>
+    </aside>
+
+    <!-- ПРАВАЯ ЧАСТЬ: КОНТЕНТ ПЕРСОНАЖА -->
+    <main class="main-content">
+      
+      <!-- Заголовок -->
+      <header class="char-hero">
+        <h1 class="char-title">Нарет</h1>
+        <p class="char-subtitle">Страж Врат / Песчаный Проводник</p>
+      </header>
+
+      <div class="character-layout">
+        <!-- Арт -->
+        <div class="char-image-wrapper">
+          <img src="img/naret-full.jpg" alt="Нарет, Страж Врат" onerror="this.parentNode.innerHTML='<span style=\'color:rgba(255,255,255,0.4)\'>Арт скоро здесь</span>'">
+        </div>
+
+        <!-- Описание -->
+        <div class="char-info-block">
+          <p class="char-desc">
+            Нарет — хранитель древних Врат, затерянных среди бесконечных дюн. Он не помнит своего прошлого, но знает каждое дуновение ветра в этих землях. Его долг — не пускать чужаков внутрь, но иногда он делает исключения для тех, кто говорит на языке песков.
+          </p>
+        </div>
+      </div>
+
+      <!-- Характеристики (карточки) -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Роль</span>
+          <span class="stat-value">Страж Врат</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Возраст</span>
+          <span class="stat-value">Неизвестен (выглядит на 25)</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Мир</span>
+          <span class="stat-value">Песчаные Врата</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Тип модели</span>
+          <span class="stat-value">2D VTuber</span>
+        </div>
+      </div>
+
+      <!-- Блок идей для контента -->
+      <div class="content-ideas-block">
+        <h3 class="ideas-heading">Идеи для мультиплатформенного контента</h3>
+        <div class="ideas-list">
+          <div class="idea-item">
+            <strong>Twitch:</strong> Стрим «Рисую Нарета в реальном времени» + чат‑интерактив (зрители выбирают деталь образа).
+          </div>
+          <div class="idea-item">
+            <strong>YouTube Shorts:</strong> «30 секунд — история Нарета: кто он и почему охраняет Врата».
+          </div>
+          <div class="idea-item">
+            <strong>TikTok:</strong> Короткие анимации: Нарет открывает Врата, эффект «пыль летит в камеру».
+          </div>
+          <div class="idea-item">
+            <strong>Telegram:</strong> Пост‑карточка с одной характеристикой (например, «Сегодня: любимая фраза Нарета») + опрос.
+          </div>
+          <div class="idea-item" style="margin-top:16px; color:#aaa; font-size:0.9rem;">
+            💡 Эти форматы помогут быстрее набирать аудиторию и тестировать разные площадки.
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- ЗВУКИ (должны лежать в папке sounds/) -->
+  <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
+  <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
+
+  <script>
+    const clickAudio = document.getElementById('sound-click');
+    const hoverAudio = document.getElementById('sound-hover');
+
+    // Безопасное воспроизведение звука (браузеры требуют взаимодействия пользователя)
+    function playSound(audio) {
+      if (!audio) return;
+      audio.currentTime = 0; // перезапуск с начала
+      audio.play().catch(e => {
+        // Это нормально: автовоспроизведение заблокировано браузером, пока пользователь не кликнет
+        console.log('Автовоспроизведение заблокировано браузером (нормально до первого клика)');
+      });
+    }
+
+    // Элементы, на которых будут звуки
+    const interactiveElements = document.querySelectorAll(
+      '.nav-link, .social-icon-btn, .order-btn, .payment-btn, .modal-close'
+    );
+
+    interactiveElements.forEach(el => {
+      // Звук при наведении
+      el.addEventListener('mouseenter', () => {
+        playSound(hoverAudio);
+      });
+
+      // Звук при клике
+      el.addEventListener('click', () => {
+        playSound(clickAudio);
+      });
+    });
+
+    // Модальное окно
+    const openBtn = document.getElementById('open-payment');
+    const closeBtn = document.getElementById('close-payment');
+    const modal = document.getElementById('payment-modal');
+
+    if (openBtn) {
+      openBtn.addEventListener('click', () => {
+        modal.classList.add('active');
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

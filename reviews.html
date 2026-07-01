@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Отзывы — Ель Миу Азхар</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #050505;
+      color: #fff;
+      box-sizing: border-box;
+    }
+
+    * { box-sizing: border-box; }
+
+    .page-wrapper {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* --- ЛЕВАЯ ПАНЕЛЬ (САЙДБАР) --- */
+    .sidebar {
+      width: 260px;
+      height: 100%;
+      background: #0b0b0b;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .logo-wrapper {
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .site-logo {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 15px rgba(209, 177, 128, 0.4));
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .logo-wrapper img { animation: logoFloat 6s ease-in-out infinite; }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 5px 0;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #d1b180;
+      padding-left: 10px;
+    }
+
+    .social-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: auto;
+      flex-wrap: nowrap;
+    }
+
+    .social-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: white;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      overflow: hidden;
+      backface-visibility: hidden;
+      perspective: 1000px;
+    }
+
+    .social-icon-btn img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      display: block;
+    }
+
+    .social-icon-btn:hover {
+      background: #d1b180;
+      transform: scale(1.1) rotate(10deg);
+      border-color: #d1b180;
+      z-index: 20;
+    }
+
+    .social-icon-btn:hover img {
+      filter: brightness(0) invert(0);
+    }
+
+    /* --- ПРАВАЯ ЧАСТЬ (КОНТЕНТ) --- */
+    .main-content {
+      flex-grow: 1;
+      background: #050505;
+      padding: 60px 50px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      color: white;
+      margin: 0 0 50px 0;
+      line-height: 1.1;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+    }
+
+    /* === СТИЛИ ДЛЯ КРУТЯЩЕЙСЯ ЛЕНТЫ === */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: 60px;
+      overflow: hidden; /* Обрезаем всё, что вылезает за границы */
+      padding-bottom: 20px;
+    }
+
+    .carousel-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: #d1b180;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* Контейнер для движения */
+    .track-wrapper {
+      display: flex;
+      gap: 20px;
+      /* Ключевое свойство для анимации */
+      animation: scroll 40s linear infinite; 
+    }
+
+    /* Дублируем ленту для зацикливания */
+    .track-wrapper.duplicate {
+      animation: scroll-reverse 40s linear infinite;
+    }
+
+    .review-card {
+      min-width: 340px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(209, 177, 128, 0.1);
+      padding: 28px;
+      border-radius: 4px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      /* Убираем старую анимацию появления, чтобы не конфликтовала с прокруткой */
+      opacity: 1;
+      transform: none;
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .review-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #d1b180;
+      flex-shrink: 0;
+      font-size: 1.2rem;
+    }
+
+    .review-info h4 {
+      margin: 0 0 4px 0;
+      color: white;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+    }
+
+    .review-info span {
+      color: rgba(209, 177, 128, 0.8);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .review-text {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin: 0;
+      font-size: 0.95rem;
+      flex-grow: 1;
+    }
+
+    .review-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: #d1b180;
+    }
+
+    /* Анимация прокрутки */
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); } /* Сдвигаем на половину ширины (на ширину одной ленты) */
+    }
+
+    @keyframes scroll-reverse {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    .tg-cta-wrapper {
+      margin-top: auto;
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .btn-tg {
+      background: transparent;
+      border: 1px solid #d1b180;
+      color: #d1b180;
+      padding: 16px 40px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.35s;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-tg:hover {
+      background: #d1b180;
+      color: #000;
+      box-shadow: 0 0 24px rgba(209, 177, 128, 0.3);
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 900px) {
+      .sidebar { width: 220px; padding: 30px 15px; }
+      .main-content { padding: 40px 30px; }
+      .page-title { font-size: 2.5rem; }
+    }
+
+    @media (max-width: 768px) {
+      .page-wrapper { flex-direction: column; }
+      .sidebar {
+        width: 100%; height: auto; padding: 20px; flex-direction: row;
+        justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+        border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+      .logo-wrapper { margin-bottom: 0; }
+      .nav-list { flex-direction: row; gap: 15px; margin-top: 10px; flex-grow: 1; justify-content: center; }
+      .social-row { margin-top: 0; justify-content: center; width: 100%; }
+      .main-content { padding: 30px 20px; }
+      .page-title { font-size: 2rem; }
+      
+      /* На мобильных отключаем бесконечную прокрутку, чтобы можно было листать пальцем */
+      .track-wrapper, .track-wrapper.duplicate {
+        animation: none;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 50px;
+      }
+      .review-card {
+        scroll-snap-align: start;
+      }
+    }
+  </style>
+</head>
+<body class="bg-home">
+  <div class="page-wrapper">
+    
+    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <aside class="sidebar">
+      <div class="logo-wrapper">
+        <img src="img/logo.png" alt="Ель Миу Азхар" class="site-logo" onerror="this.style.display='none'">
+      </div>
+      
+      <nav>
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Главная</a></li>
+          <li><a href="gallery.html" class="nav-link">Галерея</a></li>
+          <li><a href="services.html" class="nav-link">Услуги</a></li>
+          <li><a href="world.html" class="nav-link">Мир</a></li>
+          <li><a href="character.html" class="nav-link">Персонаж</a></li>
+          <li><a href="reviews.html" class="nav-link active">Отзывы</a></li>
+          <li><a href="about.html" class="nav-link">Обо мне</a></li>
+        </ul>
+      </nav>
+      
+      <div class="social-row">
+        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn" title="Twitch">
+          <img src="img/twitch.png" alt="Twitch" onerror="this.style.display='none'">
+        </a>
+        <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn" title="Telegram">
+          <img src="img/telegram.png" alt="Telegram" onerror="this.style.display='none'">
+        </a>
+        <a href="https://www.youtube.com/@elmiuazhar" target="_blank" class="social-icon-btn" title="YouTube">
+          <img src="img/youtube.png" alt="YouTube" onerror="this.style.display='none'">
+        </a>
+        <a href="https://www.tiktok.com/@elmiuazhar?is_from_webapp=1&sender_device=pc" target="_blank" class="social-icon-btn" title="TikTok">
+          <img src="img/tiktok.png" alt="TikTok" onerror="this.style.display='none'">
+        </a>
+      </div>
+    </aside>
+
+    <!-- ПРАВАЯ ЧАСТЬ: ОТЗЫВЫ -->
+    <main class="main-content">
+      <h1 class="page-title">Отзывы</h1>
+
+      <!-- Первая лента отзывов -->
+      <div class="carousel-container">
+        <div class="carousel-title">Лента 1: свежие отзывы</div>
+        
+        <!-- Первая копия ленты -->
+        <div class="track-wrapper">
+          <!-- Реальный отзыв -->
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">A</div>
+              <div class="review-info">
+                <h4>Raziel_r1</h4>
+                <span>Стример-ютубер</span>
+              </div>
+            </div>
+            <p class="review-text">Заказывал рисунок арлекино в полный рост, результат поразил меня и превысил все мои ожидания. 11/10 чисто для меня.</p>
+          </article>
+          
+          <!-- МНОГО ПУСТЫХ ОТЗЫВОВ ДЛЯ ОБЪЕМА -->
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+        </div>
+
+        <!-- Вторая копия ленты (для зацикливания) -->
+        <div class="track-wrapper duplicate">
+          <!-- Реальный отзыв -->
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">A</div>
+              <div class="review-info">
+                <h4>Raziel_r1</h4>
+                <span>Стример-ютубер</span>
+              </div>
+            </div>
+            <p class="review-text">Заказывал рисунок арлекино в полный рост, результат поразил меня и превысил все мои ожидания. 11/10 чисто для меня.</p>
+          </article>
+          
+          <!-- Те же самые пустые отзывы -->
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+        </div>
+      </div>
+
+      <!-- Вторая лента отзывов -->
+      <div class="carousel-container">
+        <div class="carousel-title">Лента 2: проверенные отзывы</div>
+        
+        <!-- Первая копия ленты -->
+        <div class="track-wrapper">
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+        </div>
+
+        <!-- Вторая копия ленты -->
+        <div class="track-wrapper duplicate">
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+          <article class="review-card">
+            <div class="review-header">
+              <div class="review-avatar">-</div>
+              <div class="review-info">
+                <h4>unnamed</h4>
+                <span>zero-null</span>
+              </div>
+            </div>
+            <p class="review-text">zero-null</p>
+          </article>
+        </div>
+      </div>
+      
+
+      <!-- Кнопка перехода в ТГК -->
+      <div class="tg-cta-wrapper">
+        <a href="https://t.me/https://t.me/MIUMIU690028" target="_blank" class="btn-tg">Перейти в Telegram-канал</a>
+        
+      </div>
+    </main>
+  </div>
+  <!-- Аудиофайлы -->
+<audio id="sfx-hover" src="sounds/navodka.mp3" preload="auto"></audio>
+<audio id="sfx-click" src="sounds/tik.mp3" preload="auto"></audio>
+
+<script>
+  const hoverSound = document.getElementById('sfx-hover');
+  const clickSound = document.getElementById('sfx-click');
+
+  function playSound(audio) {
+    if (!audio) return;
+    audio.currentTime = 0; // Перемотка в начало, чтобы можно было быстро кликать подряд
+    audio.play().catch(e => {
+      // Если браузер блокирует автовоспроизведение — просто игнорируем, сайт не ломается
+    });
+  }
+
+  // Элементы, на которых будет звук при наведении
+  const hoverElements = document.querySelectorAll('.nav-link, .social-icon-btn, .review-card, .btn-tg');
+  hoverElements.forEach(el => {
+    el.addEventListener('mouseenter', () => playSound(hoverSound));
+  });
+
+  // Элементы, на которых будет звук при клике
+  const clickElements = document.querySelectorAll('.nav-link, .social-icon-btn, .btn-tg');
+  clickElements.forEach(el => {
+    el.addEventListener('click', () => playSound(clickSound));
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Галерея работ — Ель Миу Азхар</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Подключаем аудиофайлы -->
+  <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
+  <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
+
+  <style>
+    /* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Montserrat', sans-serif;
+      background-color: #050505;
+      color: #fff;
+      box-sizing: border-box;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    * { box-sizing: border-box; }
+
+    .page-wrapper {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body.bg-gallery {
+      background-image: url('img/demka.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-color: #0a0a0a;
+    }
+
+    /* --- ЛЕВАЯ ПАНЕЛЬ --- */
+    .sidebar {
+      width: 260px;
+      height: 100%;
+      background: #0b0b0b;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .logo-wrapper {
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .site-logo {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 15px rgba(209, 177, 128, 0.4));
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    .logo-wrapper img {
+      animation: logoFloat 6s ease-in-out infinite;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 5px 0;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #d1b180;
+      padding-left: 10px;
+    }
+
+    .social-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: auto;
+      flex-wrap: nowrap;
+    }
+
+    .social-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: white;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      overflow: hidden;
+    }
+
+    .social-icon-btn img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .social-icon-btn:hover {
+      background: #d1b180;
+      transform: scale(1.1) rotate(10deg);
+      border-color: #d1b180;
+    }
+
+    .social-icon-btn:hover img {
+      filter: brightness(0) invert(0);
+    }
+    
+
+    /* --- ПРАВАЯ ЧАСТЬ (КОНТЕНТ) --- */
+    .main-content {
+      flex-grow: 1;
+      background: rgba(5, 5, 5, 0.85);
+      padding: 60px 50px;
+      overflow-y: auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gallery-header {
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(205, 163, 110, 0.2);
+      padding-bottom: 20px;
+    }
+
+    .gallery-title {
+      font-size: 3rem;
+      line-height: 1.05;
+      color: white;
+      margin: 0;
+      letter-spacing: 1px;
+      text-transform: lowercase;
+      font-family: 'Cormorant Garamond', serif;
+      font-variant-caps: small-caps;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+    }
+
+    .gallery-filters {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.6);
+      padding: 10px 24px;
+      font-family: 'Cormorant Garamond', serif;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      border-color: #d1b180;
+      color: #d1b180;
+      background: rgba(209, 177, 128, 0.08);
+      box-shadow: 0 0 15px rgba(209, 177, 128, 0.15);
+    }
+
+    /* --- СЕТКА ГАЛЕРЕИ --- */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .gallery-item {
+      height: 0;
+      padding-bottom: 133.33%; 
+      background: rgba(11, 11, 11, 0.6);
+      border: 1px solid rgba(205, 163, 110, 0.1);
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+      
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+      
+      display: block; 
+    }
+
+    .gallery-item img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 20px;
+      background: linear-gradient(to top, rgba(11, 11, 11, 0.9), transparent);
+      color: #d1b180;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item:hover .gallery-caption {
+      opacity: 1;
+    }
+
+    .gallery-item.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .gallery-item.hidden {
+      opacity: 0;
+      transform: translateY(-40px) scale(0.95);
+      pointer-events: none;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: #d1b180;
+      background: rgba(209, 177, 128, 0.1);
+      z-index: 10;
+    }
+
+    /* --- ЛАЙТБОКС --- */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      animation: fadeIn 0.3s ease-out;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .close-lightbox {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #fff;
+      font-size: 3rem;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+      transition: color 0.3s;
+    }
+
+    .close-lightbox:hover {
+      color: #d1b180;
+    }
+
+    @keyframes fadeInDown {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar { width: 220px; padding: 30px 15px; }
+      .main-content { padding: 40px 30px; }
+      .gallery-title { font-size: 2.5rem; }
+    }
+
+    @media (max-width: 768px) {
+      .page-wrapper { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+      .logo-wrapper { margin-bottom: 0; }
+      .nav-list {
+        flex-direction: row;
+        gap: 15px;
+        margin-top: 10px;
+        flex-grow: 1;
+        justify-content: center;
+      }
+      .social-row {
+        margin-top: 0;
+        justify-content: center;
+        width: 100%;
+      }
+      .main-content { padding: 30px 20px; }
+      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+      .gallery-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body class="bg-gallery">
+
+  <div class="page-wrapper">
+    
+    <aside class="sidebar">
+      <div class="logo-wrapper">
+        <img src="img/logo.png" alt="Ель Миу Азхар" class="site-logo" onerror="this.style.display='none'">
+      </div>
+      
+      <nav>
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link">Главная</a></li>
+          <li><a href="gallery.html" class="nav-link active">Галерея</a></li>
+          <li><a href="services.html" class="nav-link">Услуги</a></li>
+          <li><a href="world.html" class="nav-link">Мир</a></li>
+          <li><a href="character.html" class="nav-link">Персонаж</a></li>
+          <li><a href="reviews.html" class="nav-link">Отзывы</a></li>
+          <li><a href="about.html" class="nav-link">Обо мне</a></li>
+        </ul>
+            </nav>
+      
+      <div class="social-row">
+        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn" title="Twitch">
+          <img src="img/twitch.png" alt="Twitch">
+        </a>
+        <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn" title="Telegram">
+          <img src="img/telegram.png" alt="Telegram">
+        </a>
+        <a href="https://www.youtube.com/@elmiuazhar" target="_blank" class="social-icon-btn" title="YouTube">
+          <img src="img/youtube.png" alt="YouTube">
+        </a>
+        <a href="https://www.tiktok.com/@elmiuazhar?is_from_webapp=1&sender_device=pc" target="_blank" class="social-icon-btn" title="TikTok">
+          <img src="img/tiktok.png" alt="TikTok">
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      
+      <header class="gallery-header">
+        <h1 class="gallery-title">Галерея работ</h1>
+        
+        <div class="gallery-filters">
+          <button class="filter-btn active" data-filter="all">Все работы</button>
+          <button class="filter-btn" data-filter="sketches">Скетчи</button>
+          <button class="filter-btn" data-filter="vtuber">VTuber модели</button>
+          <button class="filter-btn" data-filter="illustrations">Иллюстрации</button>
+        </div>
+      </header>
+      
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- СКЕТЧИ -->
+        <div class="gallery-item" data-category="sketches">
+          <img src="img/image_1.png" alt="Скетч 1" />
+          <div class="gallery-caption">Скетч №1</div>
+        </div>
+        <div class="gallery-item" data-category="sketches">
+          <img src="img/image_3.png" alt="Скетч 3" />
+          <div class="gallery-caption">Скетч №3</div>
+        </div>
+        <div class="gallery-item" data-category="sketches">
+          <img src="img/image_5.png" alt="Скетч 5" />
+          <div class="gallery-caption">Скетч №5</div>
+        </div>
+        <div class="gallery-item" data-category="sketches">
+          <img src="img/image_7.png" alt="Скетч 7" />
+          <div class="gallery-caption">Скетч №7</div>
+        </div>
+        <div class="gallery-item" data-category="sketches">
+          <img src="img/image_8.png" alt="Скетч 8" />
+          <div class="gallery-caption">Скетч №8</div>
+        </div>
+        <div class="gallery-item" data-category="sketches">
+          <img src="img/image_9.png" alt="Скетч 9" />
+          <div class="gallery-caption">Скетч №9</div>
+        </div>
+        <div class="gallery-item" data-category="sketches">
+          <img src="img/image_10.png" alt="Скетч 10" />
+          <div class="gallery-caption">Скетч №10</div>
+        </div>
+        <div class="gallery-item" data-category="sketches">
+          <img src="img/image_11.jpg" alt="Скетч 11" />
+          <div class="gallery-caption">Скетч №11</div>
+        </div>
+
+        <!-- VTUBER -->
+        <div class="gallery-item" data-category="vtuber">
+          <img src="img/image_12.jpg" alt="VTuber 12" />
+          <div class="gallery-caption">VTuber модель №12</div>
+        </div>
+        <div class="gallery-item" data-category="vtuber">
+          <img src="img/image_13.png" alt="VTuber 13" />
+          <div class="gallery-caption">VTuber модель №13</div>
+        </div>
+
+        <!-- ИЛЛЮСТРАЦИИ -->
+        <div class="gallery-item" data-category="illustrations">
+          <img src="img/image_2.png" alt="Иллюстрация 2" />
+          <div class="gallery-caption">Иллюстрация №2</div>
+        </div>
+        <div class="gallery-item" data-category="illustrations">
+          <img src="img/image_4.png" alt="Иллюстрация 4" />
+          <div class="gallery-caption">Иллюстрация №4</div>
+        </div>
+        <div class="gallery-item" data-category="illustrations">
+          <img src="img/image_6.png" alt="Иллюстрация 6" />
+          <div class="gallery-caption">Иллюстрация №6</div>
+        </div>
+        <div class="gallery-item" data-category="illustrations">
+          <img src="img/image_14.png" alt="Иллюстрация 14" />
+          <div class="gallery-caption">Иллюстрация №14</div>
+        </div>
+        <div class="gallery-item" data-category="illustrations">
+          <img src="img/image_15.png" alt="Иллюстрация 15" />
+          <div class="gallery-caption">Иллюстрация №15</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <span class="close-lightbox" id="close-lightbox">&times;</span>
+    <img src="" alt="Full size image" class="lightbox-img" id="lightbox-img" />
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('galleryGrid');
+      const buttons = document.querySelectorAll('.filter-btn');
+      const items = Array.from(grid.children);
+
+      // 1. АНИМАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+      setTimeout(() => {
+        items.forEach((item, index) => {
+          item.style.transitionDelay = `${index * 0.08}s`;
+          item.classList.add('visible');
+        });
+      }, 100);
+
+      // 2. ЛОГИКА ФИЛЬТРОВ
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.getAttribute('data-filter');
+
+          items.forEach(item => {
+            item.classList.remove('visible');
+            item.classList.remove('hidden');
+            item.style.transitionDelay = '0s';
+          });
+
+          const sortedItems = items.sort((a, b) => {
+            const aCat = a.getAttribute('data-category');
+            const bCat = b.getAttribute('data-category');
+
+            const aMatch = (filter === 'all' || aCat === filter);
+            const bMatch = (filter === 'all' || bCat === filter);
+
+            if (aMatch === bMatch) return 0;
+            if (aMatch && !bMatch) return -1;
+            return 1;
+          });
+
+          sortedItems.forEach(item => {
+            grid.appendChild(item);
+          });
+
+          requestAnimationFrame(() => {
+            sortedItems.forEach((item, index) => {
+              const itemCategory = item.getAttribute('data-category');
+              const shouldShow = (filter === 'all' || itemCategory === filter);
+              item.style.transitionDelay = `${index * 0.05}s`;
+              if (shouldShow) {
+                item.classList.add('visible');
+              } else {
+                item.classList.add('hidden');
+              }
+            });
+          });
+        });
+      });
+
+      // 3. ЛАЙТБОКС
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const closeBtn = document.getElementById('close-lightbox');
+      const galleryItems = document.querySelectorAll('.gallery-item');
+
+      galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const imgSrc = item.querySelector('img').src;
+          lightboxImg.src = imgSrc;
+          lightbox.classList.add('active');
+        });
+      });
+
+      closeBtn.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+      });
+
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          lightbox.classList.remove('active');
+        }
+      });
+      
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+          lightbox.classList.remove('active');
+        }
+      });
+    });
+
+    // --- ЗВУКИ (клик и наведение, без ветра) ---
+    const soundClick = document.getElementById('sound-click');
+    const soundHover = document.getElementById('sound-hover');
+
+    if (soundClick) soundClick.volume = 0.3;
+    if (soundHover) soundHover.volume = 0.3;
+
+    function playClick() {
+      if (soundClick && soundClick.src) {
+        soundClick.currentTime = 0;
+        soundClick.play().catch(e => console.log('Звук клика заблокирован браузером'));
+      }
+    }
+
+    function playHover() {
+      if (soundHover && soundHover.src) {
+        soundHover.currentTime = 0;
+        soundHover.play().catch(e => console.log('Звук наведения заблокирован браузером'));
+      }
+    }
+
+    const interactiveElements = document.querySelectorAll(
+      'button, .filter-btn, .social-icon-btn, .nav-link, .gallery-item'
+    );
+
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', playHover);
+      el.addEventListener('mousedown', playClick);
+    });
+  </script>
+</body>
+</html>
