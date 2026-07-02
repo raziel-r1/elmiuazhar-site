@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Отзывы — Ель Миу Азхар</title>
+  <title>Отзывы и FAQ | Ель Миу Азхар</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
   
   <style>
-    /* --- БАЗОВЫЕ НАСТРОЙКИ --- */
+    /* --- БАЗА --- */
     body {
       margin: 0;
       padding: 0;
@@ -21,8 +22,8 @@
       background-color: #050505;
       color: #fff;
       box-sizing: border-box;
+      position: relative;
     }
-
     * { box-sizing: border-box; }
 
     .page-wrapper {
@@ -30,9 +31,10 @@
       width: 100%;
       min-height: 100vh;
       position: relative;
+      overflow: hidden;
     }
 
-    /* --- ЛЕВАЯ ПАНЕЛЬ (САЙДБАР) --- */
+    /* --- САЙДБАР --- */
     .sidebar {
       width: 260px;
       height: 100%;
@@ -42,103 +44,25 @@
       flex-direction: column;
       justify-content: space-between;
       flex-shrink: 0;
-      position: relative;
       z-index: 10;
       border-right: 1px solid rgba(255,255,255,0.05);
     }
-
-    .logo-wrapper {
-      margin-bottom: 30px;
-      opacity: 0;
-      transform: translateY(-20px);
-      animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .site-logo {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      filter: drop-shadow(0 0 15px rgba(209, 177, 128, 0.4));
-    }
-
-    @keyframes logoFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
+    .logo-wrapper { margin-bottom: 30px; opacity: 0; transform: translateY(-20px); animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .site-logo { max-width: 100%; height: auto; display: block; filter: drop-shadow(0 0 15px rgba(209, 177, 128, 0.4)); }
+    @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
     .logo-wrapper img { animation: logoFloat 6s ease-in-out infinite; }
 
-    .nav-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+    .nav-link { text-decoration: none; color: rgba(255, 255, 255, 0.5); font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; padding: 5px 0; transition: all 0.3s ease; position: relative; }
+    .nav-link:hover, .nav-link.active { color: #d1b180; padding-left: 10px; }
 
-    .nav-link {
-      text-decoration: none;
-      color: rgba(255, 255, 255, 0.5);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      padding: 5px 0;
-      transition: all 0.3s ease;
-      position: relative;
-    }
+    .social-row { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: auto; flex-wrap: nowrap; }
+    .social-icon-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; text-decoration: none; color: white; transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; backface-visibility: hidden; perspective: 1000px; }
+    .social-icon-btn img { width: 24px; height: 24px; object-fit: contain; filter: brightness(0) invert(1); display: block; }
+    .social-icon-btn:hover { background: #d1b180; transform: scale(1.1) rotate(10deg); border-color: #d1b180; z-index: 20; }
+    .social-icon-btn:hover img { filter: brightness(0) invert(0); }
 
-    .nav-link:hover, .nav-link.active {
-      color: #d1b180;
-      padding-left: 10px;
-    }
-
-    .social-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      margin-top: auto;
-      flex-wrap: nowrap;
-    }
-
-    .social-icon-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: white;
-      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      overflow: hidden;
-      backface-visibility: hidden;
-      perspective: 1000px;
-    }
-
-    .social-icon-btn img {
-      width: 24px;
-      height: 24px;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-      display: block;
-    }
-
-    .social-icon-btn:hover {
-      background: #d1b180;
-      transform: scale(1.1) rotate(10deg);
-      border-color: #d1b180;
-      z-index: 20;
-    }
-
-    .social-icon-btn:hover img {
-      filter: brightness(0) invert(0);
-    }
-
-    /* --- ПРАВАЯ ЧАСТЬ (КОНТЕНТ) --- */
+    /* --- КОНТЕНТ --- */
     .main-content {
       flex-grow: 1;
       background: #050505;
@@ -146,8 +70,10 @@
       position: relative;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #444 #111;
     }
-
     .page-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(2.5rem, 5vw, 3.5rem);
@@ -159,38 +85,47 @@
       animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
     }
 
-    /* === СТИЛИ ДЛЯ КРУТЯЩЕЙСЯ ЛЕНТЫ === */
+    /* --- ЛЕНТЫ ОТЗЫВОВ (БЕСШОВНЫЕ) --- */
     .carousel-container {
       position: relative;
       width: 100%;
       margin-bottom: 60px;
-      overflow: hidden; /* Обрезаем всё, что вылезает за границы */
+      overflow: hidden;
       padding-bottom: 20px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
+    .carousel-container::-webkit-scrollbar { display: none; }
 
     .carousel-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       color: #d1b180;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       text-transform: uppercase;
       letter-spacing: 2px;
     }
 
-    /* Контейнер для движения */
-    .track-wrapper {
+    .track-wrapper, .track-wrapper.duplicate {
       display: flex;
       gap: 20px;
-      /* Ключевое свойство для анимации */
-      animation: scroll 40s linear infinite; 
+      will-change: transform;
     }
 
-    /* Дублируем ленту для зацикливания */
-    .track-wrapper.duplicate {
-      animation: scroll-reverse 40s linear infinite;
-    }
+    /* Разные скорости для разных лент */
+    .speed-fast .track-wrapper { animation: scroll 20s linear infinite; }
+    .speed-slow .track-wrapper { animation: scroll 120s linear infinite; }
+    .speed-medium .track-wrapper { animation: scroll 50s linear infinite; }
 
-    .review-card {
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes scroll-reverse { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
+    .speed-fast .track-wrapper.duplicate { animation: scroll-reverse 10s linear infinite; }
+    .speed-slow .track-wrapper.duplicate { animation: scroll-reverse 160s linear infinite; }
+    .speed-medium .track-wrapper.duplicate { animation: scroll-reverse 65s linear infinite; }
+
+    /* Общие стили карточек */
+    .review-card, .faq-card {
       min-width: 340px;
       background: rgba(255, 255, 255, 0.02);
       border: 1px solid rgba(209, 177, 128, 0.1);
@@ -200,18 +135,29 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      /* Убираем старую анимацию появления, чтобы не конфликтовала с прокруткой */
-      opacity: 1;
-      transform: none;
+      cursor: pointer;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      pointer-events: auto;
+    }
+    .review-card:hover, .faq-card:hover {
+      border-color: #d1b180;
+      transform: translateY(-5px);
+      z-index: 10;
+    }
+    .review-card::before, .faq-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: #d1b180;
     }
 
+    /* Стили для отзывов */
     .review-header {
       display: flex;
       align-items: center;
       gap: 15px;
       margin-bottom: 18px;
     }
-
     .review-avatar {
       width: 50px;
       height: 50px;
@@ -225,86 +171,67 @@
       flex-shrink: 0;
       font-size: 1.2rem;
     }
+    .review-info h4 { margin: 0 0 4px 0; color: white; font-family: 'Cormorant Garamond', serif; font-size: 1rem; }
+    .review-info span { color: rgba(209, 177, 128, 0.8); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+    .review-text { color: rgba(255, 255, 255, 0.7); line-height: 1.6; margin: 0; font-size: 0.95rem; flex-grow: 1; }
 
-    .review-info h4 {
-      margin: 0 0 4px 0;
-      color: white;
+    /* Стили для FAQ (вопрос/ответ) */
+    .faq-question {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
+      font-size: 1.1rem;
+      color: white;
+      margin: 0 0 16px 0;
+      line-height: 1.3;
     }
-
-    .review-info span {
-      color: rgba(209, 177, 128, 0.8);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .review-text {
-      color: rgba(255, 255, 255, 0.7);
-      line-height: 1.6;
+    .faq-answer {
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.5;
       margin: 0;
       font-size: 0.95rem;
       flex-grow: 1;
     }
 
-    .review-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 4px; height: 100%;
-      background: #d1b180;
+    /* --- МОДАЛЬНОЕ ОКНО --- */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(5px);
+      z-index: 1000; display: none; justify-content: center; align-items: center;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .modal-content {
+      background: #0b0b0b; padding: 40px; border-radius: 8px; width: 90%; max-width: 600px;
+      position: relative; border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+    .close-modal {
+      position: absolute; top: 20px; right: 20px; font-size: 24px; color: #d1b180;
+      cursor: pointer; line-height: 1; transition: color 0.3s;
+    }
+    .close-modal:hover { color: white; }
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: white;
+      margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;
     }
 
-    /* Анимация прокрутки */
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); } /* Сдвигаем на половину ширины (на ширину одной ленты) */
+    /* --- ИСКРЫ --- */
+    #spark-container {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 9998; overflow: hidden;
+    }
+    .spark {
+      position: absolute; border-radius: 50%; background: #d1b180;
+      box-shadow: 0 0 10px rgba(209, 177, 128, 0.8); will-change: transform, opacity;
     }
 
-    @keyframes scroll-reverse {
-      0% { transform: translateX(-50%); }
-      100% { transform: translateX(0); }
-    }
-
-    .tg-cta-wrapper {
-      margin-top: auto;
-      text-align: center;
-      padding-top: 40px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .btn-tg {
-      background: transparent;
-      border: 1px solid #d1b180;
-      color: #d1b180;
-      padding: 16px 40px;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: all 0.35s;
-      display: inline-block;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-tg:hover {
-      background: #d1b180;
-      color: #000;
-      box-shadow: 0 0 24px rgba(209, 177, 128, 0.3);
-      transform: translateY(-2px);
-    }
-
-    @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
+    /* --- АДАПТИВ (МОБИЛЬНЫЕ) --- */
     @media (max-width: 900px) {
       .sidebar { width: 220px; padding: 30px 15px; }
       .main-content { padding: 40px 30px; }
       .page-title { font-size: 2.5rem; }
     }
-
     @media (max-width: 768px) {
       .page-wrapper { flex-direction: column; }
       .sidebar {
@@ -317,29 +244,32 @@
       .social-row { margin-top: 0; justify-content: center; width: 100%; }
       .main-content { padding: 30px 20px; }
       .page-title { font-size: 2rem; }
-      
-      /* На мобильных отключаем бесконечную прокрутку, чтобы можно было листать пальцем */
+
+      /* На мобильных: отключаем анимацию и делаем ручной скролл */
       .track-wrapper, .track-wrapper.duplicate {
-        animation: none;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-padding: 0 50px;
+        animation: none !important;
+        overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 50px;
+        display: flex; gap: 20px;
       }
-      .review-card {
-        scroll-snap-align: start;
-      }
+      .review-card, .faq-card { scroll-snap-align: start; min-width: 320px; }
+      .track-wrapper::-webkit-scrollbar, .track-wrapper.duplicate::-webkit-scrollbar { display: none; }
     }
+
+    @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body class="bg-home">
+
+ <audio id="sfx-hover" src="sounds/hover.mp3" preload="auto" loop="false"></audio>
+  <audio id="sfx-click" src="sounds/click.mp3" preload="auto" loop="false"></audio>
+
   <div class="page-wrapper">
-    
-    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <!-- Сайдбар -->
     <aside class="sidebar">
       <div class="logo-wrapper">
-        <img src="img/logo.png" alt="Ель Миу Азхар" class="site-logo" onerror="this.style.display='none'">
+        <img src="img/logo.png" alt="Логотип" class="site-logo" onerror="this.style.display='none'">
       </div>
-      
       <nav>
         <ul class="nav-list">
           <li><a href="index.html" class="nav-link">Главная</a></li>
@@ -351,7 +281,6 @@
           <li><a href="about.html" class="nav-link">Обо мне</a></li>
         </ul>
       </nav>
-      
       <div class="social-row">
         <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn" title="Twitch">
           <img src="img/twitch.png" alt="Twitch" onerror="this.style.display='none'">
@@ -368,718 +297,305 @@
       </div>
     </aside>
 
-    <!-- ПРАВАЯ ЧАСТЬ: ОТЗЫВЫ -->
+    <!-- Правая часть: контент -->
     <main class="main-content">
-      <h1 class="page-title">Отзывы</h1>
+      <h1 class="page-title">Отзывы и FAQ</h1>
 
-      <!-- Первая лента отзывов -->
-      <div class="carousel-container">
-        <div class="carousel-title">Лента 1: свежие отзывы</div>
-        
-        <!-- Первая копия ленты -->
+      <!-- ЛЕНТА 1 — Новые отзывы (быстрая) -->
+      <div class="carousel-container speed-fast">
+        <div class="carousel-title">Новые отзывы</div>
+        <!-- Основная лента -->
         <div class="track-wrapper">
           <!-- Реальный отзыв -->
           <article class="review-card">
             <div class="review-header">
-              <div class="review-avatar">A</div>
+              <div class="review-avatar">R</div>
               <div class="review-info">
                 <h4>Raziel_r1</h4>
-                <span>Стример-ютубер</span>
+                <span>Клиент</span>
               </div>
             </div>
-            <p class="review-text">Заказывал рисунок арлекино в полный рост, результат поразил меня и превысил все мои ожидания. 11/10 чисто для меня.</p>
+            <p class="review-text">Очень круто, стиль узнаваемый, VTube-модель получилась именно такой, как я хотел. Детализация на уровне!</p>
           </article>
-          
-          <!-- МНОГО ПУСТЫХ ОТЗЫВОВ ДЛЯ ОБЪЕМА -->
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
+          <!-- Пустые отзывы -->
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
         </div>
-
-        <!-- Вторая копия ленты (для зацикливания) -->
+        <!-- Дубликат ленты для бесшовного эффекта -->
         <div class="track-wrapper duplicate">
-          <!-- Реальный отзыв -->
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">A</div>
-              <div class="review-info">
-                <h4>Raziel_r1</h4>
-                <span>Стример-ютубер</span>
-              </div>
-            </div>
-            <p class="review-text">Заказывал рисунок арлекино в полный рост, результат поразил меня и превысил все мои ожидания. 11/10 чисто для меня.</p>
-          </article>
-          
-          <!-- Те же самые пустые отзывы -->
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">R</div><div class="review-info"><h4>Raziel_r1</h4><span>Клиент</span></div></div><p class="review-text">Очень круто, стиль узнаваемый, VTube-модель получилась именно такой, как я хотел. Детализация на уровне!</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
         </div>
       </div>
 
-      <!-- Вторая лента отзывов -->
-      <div class="carousel-container">
-        <div class="carousel-title">Лента 2: проверенные отзывы</div>
-        
-        <!-- Первая копия ленты -->
+      <!-- ЛЕНТА 2 — Архив отзывов (медленная) -->
+      <div class="carousel-container speed-slow">
+        <div class="carousel-title">Архив отзывов</div>
         <div class="track-wrapper">
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">R</div><div class="review-info"><h4>Raziel_r1</h4><span>Клиент</span></div></div><p class="review-text">Очень круто, стиль узнаваемый, VTube-модель получилась именно такой, как я хотел. Детализация на уровне!</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+        </div>
+        <div class="track-wrapper duplicate">
+          <article class="review-card"><div class="review-header"><div class="review-avatar">R</div><div class="review-info"><h4>Raziel_r1</h4><span>Клиент</span></div></div><p class="review-text">Очень круто, стиль узнаваемый, VTube-модель получилась именно такой, как я хотел. Детализация на уровне!</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+          <article class="review-card"><div class="review-header"><div class="review-avatar">Z</div><div class="review-info"><h4>Zero</h4><span>Гость</span></div></div><p class="review-text">zero‑null</p></article>
+        </div>
+      </div>
+
+      <!-- ЛЕНТА 3 — Частые вопросы (средняя скорость) -->
+      <div class="carousel-container speed-medium">
+        <div class="carousel-title">Частые вопросы</div>
+        <div class="track-wrapper">
+                    <article class="faq-card">
+            <h3 class="faq-question">Сколько времени занимает создание VTube‑модели?</h3>
+            <p class="faq-answer">Обычно от 3 до 7 дней, в зависимости от сложности и количества правок. Если нужно срочно — могу обсудить ускоренный вариант.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Можно ли заказать только концепт‑арт без модели?</h3>
+            <p class="faq-answer">Да, концепт‑арты я тоже делаю. Срок — 2–4 дня, зависит от детализации и количества ракурсов.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Какие форматы файлов вы отдаёте?</h3>
+            <p class="faq-answer">Для VTube‑моделей — PNG (отдельные слои/части), PSD (исходник), FBX (если есть 3D‑часть). Для артов — PNG и JPG, исходник — PSD. По запросу могу добавить и другие форматы.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Как происходит оплата и правки?</h3>
+            <p class="faq-answer">Работаю по предоплате 50 %. После первых правок показываю черновик: обычно даю 2–3 круга правок бесплатно. Дальше — по договорённости. Оплата через удобные платёжные системы или по реквизитам.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Делаете ли вы анимации для VTube?</h3>
+            <p class="faq-answer">Базовые анимации (мимика, простые движения) — да, как часть модели. Полноценные короткие ролики — отдельный заказ, срок и стоимость обсуждаются отдельно.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Принимаете ли заказы от школьников и подростков?</h3>
+            <p class="faq-answer">Конечно! Возраст не важен, главное — чёткое ТЗ и понимание, чего хочется. Если ТЗ слабое — помогу его составить.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Что делать, если я не уверен в стиле?</h3>
+            <p class="faq-answer">Пришлите 3–5 примеров, которые нравятся (арт, VTube, аниме, игры). На основе этого предложу 2–3 варианта эскиза бесплатно — чтобы выбрать направление.</p>
           </article>
         </div>
 
-        <!-- Вторая копия ленты -->
+        <!-- Дубликат ленты для бесшовного эффекта -->
         <div class="track-wrapper duplicate">
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Сколько времени занимает создание VTube‑модели?</h3>
+            <p class="faq-answer">Обычно от 3 до 7 дней, в зависимости от сложности и количества правок. Если нужно срочно — могу обсудить ускоренный вариант.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Можно ли заказать только концепт‑арт без модели?</h3>
+            <p class="faq-answer">Да, концепт‑арты я тоже делаю. Срок — 2–4 дня, зависит от детализации и количества ракурсов.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Какие форматы файлов вы отдаёте?</h3>
+            <p class="faq-answer">Для VTube‑моделей — PNG (отдельные слои/части), PSD (исходник), FBX (если есть 3D‑часть). Для артов — PNG и JPG, исходник — PSD. По запросу могу добавить и другие форматы.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Как происходит оплата и правки?</h3>
+            <p class="faq-answer">Работаю по предоплате 50 %. После первых правок показываю черновик: обычно даю 2–3 круга правок бесплатно. Дальше — по договорённости. Оплата через удобные платёжные системы или по реквизитам.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Делаете ли вы анимации для VTube?</h3>
+            <p class="faq-answer">Базовые анимации (мимика, простые движения) — да, как часть модели. Полноценные короткие ролики — отдельный заказ, срок и стоимость обсуждаются отдельно.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Принимаете ли заказы от школьников и подростков?</h3>
+            <p class="faq-answer">Конечно! Возраст не важен, главное — чёткое ТЗ и понимание, чего хочется. Если ТЗ слабое — помогу его составить.</p>
           </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
-          </article>
-          <article class="review-card">
-            <div class="review-header">
-              <div class="review-avatar">-</div>
-              <div class="review-info">
-                <h4>unnamed</h4>
-                <span>zero-null</span>
-              </div>
-            </div>
-            <p class="review-text">zero-null</p>
+          <article class="faq-card">
+            <h3 class="faq-question">Что делать, если я не уверен в стиле?</h3>
+            <p class="faq-answer">Пришлите 3–5 примеров, которые нравятся (арт, VTube, аниме, игры). На основе этого предложу 2–3 варианта эскиза бесплатно — чтобы выбрать направление.</p>
           </article>
         </div>
       </div>
-      
 
-      <!-- Кнопка перехода в ТГК -->
-      <div class="tg-cta-wrapper">
-        <a href="https://t.me/https://t.me/MIUMIU690028" target="_blank" class="btn-tg">Перейти в Telegram-канал</a>
-        
+      <!-- Контейнер для искр -->
+      <div id="spark-container"></div>
+
+      <!-- Модальное окно -->
+      <div id="reviewModal" class="modal-overlay">
+        <div class="modal-content">
+          <span class="close-modal">&times;</span>
+          <h2 class="modal-title">Отзыв</h2>
+          <div id="modalBody"></div>
+        </div>
       </div>
     </main>
   </div>
-  <!-- Аудиофайлы -->
-<audio id="sfx-hover" src="sounds/navodka.mp3" preload="auto"></audio>
-<audio id="sfx-click" src="sounds/tik.mp3" preload="auto"></audio>
 
-<script>
-  const hoverSound = document.getElementById('sfx-hover');
-  const clickSound = document.getElementById('sfx-click');
+  <script>
+    const modal = document.getElementById('reviewModal');
+    const closeBtn = document.querySelector('.close-modal');
+    const modalBody = document.getElementById('modalBody');
+    const reviewCards = document.querySelectorAll('.review-card');
+    const faqCards = document.querySelectorAll('.faq-card');
 
-  function playSound(audio) {
-    if (!audio) return;
-    audio.currentTime = 0; // Перемотка в начало, чтобы можно было быстро кликать подряд
-    audio.play().catch(e => {
-      // Если браузер блокирует автовоспроизведение — просто игнорируем, сайт не ломается
-    });
-  }
+    const sfxHover = document.getElementById('sfx-hover');
+    const sfxClick = document.getElementById('sfx-click');
 
-  // Элементы, на которых будет звук при наведении
-  const hoverElements = document.querySelectorAll('.nav-link, .social-icon-btn, .review-card, .btn-tg');
-  hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => playSound(hoverSound));
-  });
+    function playSound(audioElement) {
+      if (!audioElement) return;
+      audioElement.currentTime = 0;
+      const playPromise = audioElement.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          if (error.name !== 'NotAllowedError') {
+            console.error('Ошибка воспроизведения звука:', error);
+          }
+        });
+      }
+    }
 
-  // Элементы, на которых будет звук при клике
-  const clickElements = document.querySelectorAll('.nav-link, .social-icon-btn, .btn-tg');
-  clickElements.forEach(el => {
-    el.addEventListener('click', () => playSound(clickSound));
-  });
-</script>
+    function createSparks(x, y) {
+      const container = document.getElementById('spark-container');
+      if (!container) return;
 
+      const count = 15;
+      for (let i = 0; i < count; i++) {
+        const spark = document.createElement('div');
+        spark.classList.add('spark');
+
+        const size = Math.random() * 4 + 2;
+        spark.style.width = `${size}px`;
+        spark.style.height = `${size}px`;
+
+        spark.style.left = `${x - size / 2}px`;
+        spark.style.top = `${y - size / 2}px`;
+        container.appendChild(spark);
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 150 + 50;
+        const duration = Math.random() * 0.6 + 0.4;
+
+        spark.animate([
+          {
+            transform: `translate(${x - size / 2}px, ${y - size / 2}px) scale(1)`,
+            opacity: 1
+          },
+          {
+            transform: `translate(${x + Math.cos(angle) * velocity}px, ${y + Math.sin(angle) * velocity}px) scale(0)`,
+            opacity: 0
+          }
+        ], {
+          duration: duration * 1000,
+          easing: 'cubic-bezier(0, .9, .57, 1.275)',
+          fill: 'forwards'
+        }).onfinish = () => {
+          spark.remove();
+        };
+      }
+    }
+
+    function openModal(cardElement) {
+      modalBody.innerHTML = cardElement.innerHTML;
+      const title = modal.querySelector('.modal-title');
+      const name = cardElement.querySelector('.review-info h4')?.innerText || 'Отзыв';
+      title.innerText = `Отзыв от ${name}`;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Обработчик для карточек отзывов
+    if (reviewCards.length > 0) {
+      reviewCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.tagName === 'A') return;
+
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left + rect.width / 2;
+          const y = e.clientY - rect.top + rect.height / 2;
+
+          createSparks(x, y);
+          playSound(sfxClick);
+          openModal(card);
+        });
+
+        card.addEventListener('mouseenter', () => {
+          playSound(sfxHover);
+        });
+      });
+    }
+
+    // Для FAQ — модалка тоже открывается, но заголовок будет «Вопрос»
+    if (faqCards.length > 0) {
+      faqCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.tagName === 'A') return;
+
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left + rect.width / 2;
+          const y = e.clientY - rect.top + rect.height / 2;
+
+          createSparks(x, y);
+          playSound(sfxClick);
+
+          modalBody.innerHTML = card.innerHTML;
+          const title = modal.querySelector('.modal-title');
+          const question = card.querySelector('.faq-question')?.innerText || 'Вопрос';
+          title.innerText = question;
+
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        });
+
+        card.addEventListener('mouseenter', () => {
+          playSound(sfxHover);
+        });
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+    }
+  </script>
 </body>
 </html>

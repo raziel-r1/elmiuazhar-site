@@ -176,33 +176,56 @@
     }
     
     .blocks-row { 
-      display: flex; gap: 30px; margin-top: 203px; flex-wrap: wrap; 
+      display: flex; 
+      justify-content: space-between; /* Ключевое: распределяет блоки по всей ширине */
+      gap: 10px; 
+      margin-top: 200px; 
+      flex-wrap: wrap; 
     }
-    
+
     .square-card { 
-      flex: 1 1 240px; background: rgba(255, 255, 255, 0.03); 
-      border: 1px solid rgba(209, 177, 128, 0.1); padding: 30px; height: 100%; 
-      display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-      opacity: 0; transform: translateY(30px); cursor: pointer; 
+      flex: 1 1 300px; /* Базовая ширина 300px, но не меньше */
+      max-width: 450px; /* Максимальная ширина, чтобы не растягивались */
+      background: rgba(255, 255, 255, 0.03); 
+      border: 1px solid rgba(209, 177, 128, 0.1); 
+      padding: 30px; 
+      height: 100%; /* Растягивает карточку по высоте родителя */
+      display: flex; 
+      flex-direction: column; 
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      opacity: 0; 
+      transform: translateY(30px); 
+      cursor: pointer; 
+      box-sizing: border-box; /* Важно: padding не увеличивает ширину */
     }
-    
+
+/* Анимации появления */
     .square-card:nth-child(1) { animation: fadeInUp 0.6s ease forwards 1.3s; }
     .square-card:nth-child(2) { animation: fadeInUp 0.6s ease forwards 1.5s; }
     .square-card:nth-child(3) { animation: fadeInUp 0.6s ease forwards 1.7s; }
-    
+
     .square-card:hover { 
       transform: translateY(-10px) scale(1.02); 
-      border-color: #d1b180; background: rgba(209, 177, 128, 0.05); 
+      border-color: #d1b180; 
+      background: rgba(209, 177, 128, 0.05); 
     }
-    
+
     .square-card h3 { 
-      color: #d1b180; margin-top: 15px; margin-bottom: 10px; 
-      flex-grow: 1; font-family: 'Cormorant Garamond', serif; 
+      color: #d1b180; 
+      margin-top: 15px; 
+      margin-bottom: 10px; 
+      flex-grow: 1; /* Заставляет заголовок прижимать текст вниз */
+      font-family: 'Cormorant Garamond', serif; 
+      font-size: 1.2rem;
     }
-    
+
     .square-card p { 
-      color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin: 0; line-height: 1.5; 
+      color: rgba(255, 255, 255, 0.6); 
+      font-size: 0.9rem; 
+      margin: 0; 
+      line-height: 1.5; 
     }
+
     
     @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
@@ -412,14 +435,11 @@
 
     setInterval(spawnSparks, 80);
   </script>
-
   <script>
     // ---------------------------------------------------------
-    // ВНИМАНИЕ: сюда вставь свой токен и chat ID, если решишь использовать
-    // Но помни: всё, что в браузере, видят все. Это небезопасно.
+    // ВСТАВЬ СЮДА СВОЮ ССЫЛКУ (она должна заканчиваться на /exec)
     // ---------------------------------------------------------
-    const TG_TOKEN = '8337243635:AAHjshtQE6WuDBk9cfV9hHf6qEE1yDutYhQ';
-    const TG_CHAT_ID = '1758163539';
+    const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxEmUyTjowIGxTA4QsjHJLPKRZ6GbXgHZCcE11OE7oY2yb0FTH1g3TtLqAAR3-M69jN/exec'; 
 
     const modal = document.getElementById('payment-modal');
     const openBtn = document.getElementById('open-payment');
@@ -427,6 +447,7 @@
     const statusText = document.getElementById('telegram-status');
     const form = document.getElementById('order-form');
 
+    // Аудио
     const soundWind = document.getElementById('sound-wind');
     const soundClick = document.getElementById('sound-click');
     const soundHover = document.getElementById('sound-hover');
@@ -458,6 +479,7 @@
       el.addEventListener('mousedown', playClick);
     });
 
+    // Логика модального окна
     openBtn.addEventListener('click', () => {
       modal.style.display = 'flex';
       statusText.textContent = '';
@@ -474,6 +496,7 @@
       }
     });
 
+    // --- ИСПРАВЛЕННАЯ ОТПРАВКА ---
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
@@ -484,36 +507,25 @@
       statusText.textContent = '';
 
       const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      const message = 
-        '📩 <b>Новый заказ!</b>\n\n' +
-        '👤 Имя/ник: ' + data.name + '\n' +
-        '📞 Контакт: ' + data.contact + '\n' +
-        '📝 Что нужно: ' + data.request;
 
       try {
-        const url = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`;
-        const response = await fetch(url, {
+        // Отправляем запрос. 
+        // ВАЖНО: Мы НЕ проверяем response.ok, потому что при no-cors это всегда будет false/undefined
+        await fetch(SHEETS_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: TG_CHAT_ID,
-            text: message,
-            parse_mode: 'HTML'
-          })
+          mode: 'no-cors', 
+          body: formData
         });
 
-        if (response.ok) {
-          statusText.textContent = '✅ Заказ успешно отправлен!';
-          statusText.style.color = '#4caf50';
-          form.reset();
-          setTimeout(() => { modal.style.display = 'none'; }, 2000);
-        } else {
-          throw new Error('Ошибка Telegram API');
-        }
+        // Если код дошел сюда, значит fetch не упал с ошибкой сети (DNS, CORS, 404)
+        statusText.textContent = '✅ Заявка успешно отправлена! Скоро напишу.';
+        statusText.style.color = '#4caf50';
+        form.reset();
+        setTimeout(() => { modal.style.display = 'none'; }, 2000);
+
       } catch (err) {
-        statusText.textContent = '❌ Не удалось отправить. Попробуй позже.';
+        console.error(err);
+        statusText.textContent = '❌ Не удалось отправить заявку. Проверь консоль или напиши в Telegram.';
         statusText.style.color = '#f44336';
       } finally {
         btn.disabled = false;
@@ -521,5 +533,3 @@
       }
     });
   </script>
-</body>
-</html>

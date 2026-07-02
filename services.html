@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500;display=swap" rel="stylesheet">
 
   <!-- Звуки (должны лежать в sounds/) -->
   <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
@@ -61,12 +61,15 @@
     .hero-title { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: white;
       margin: 0 0 20px 0; line-height: 1.1; text-shadow: 0 0 20px rgba(0,0,0,0.5);
       opacity: 0; transform: translateY(30px); animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards; }
+    
+    /* --- БАННЕР СО СКИДКОЙ --- */
     .discount-banner { padding: 12px 20px; background: rgba(209, 177, 128, 0.15);
       border: 1px solid rgba(209, 177, 128, 0.25); color: #d1b180; font-weight: 700;
       font-size: 1.1rem; text-align: center; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(209, 177, 128, 0.1);
       opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
       letter-spacing: 1px; }
 
+    /* --- ЦЕНЫ --- */
     .price-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px; }
     .price-card { background: rgba(26, 26, 36, 0.7); backdrop-filter: blur(10px);
       border: 1px solid rgba(205, 163, 110, 0.3); padding: 25px; display: flex;
@@ -88,92 +91,104 @@
     .extra-info strong { color: #d1b180; }
     .note { color: rgba(255,255,255,0.4); font-size: 0.9rem; margin-top: 20px; line-height: 1.5; }
 
-    /* Кнопка в стиле главной */
-    .btn-action {
-      background: transparent; border: 1px solid #d1b180; color: #d1b180;
-      padding: 15px 40px; font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem; text-transform: uppercase; cursor: pointer;
-      transition: all 0.3s ease; letter-spacing: 2px; opacity: 0;
-      transform: translateY(20px); animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.0s forwards;
-    }
-    .btn-action:hover {
-      background: #d1b180; color: #000; box-shadow: 0 0 20px rgba(209, 177, 128, 0.4);
-    }
-
-    /* Модальное окно */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8); display: none; justify-content: center;
-      align-items: center; z-index: 1000; backdrop-filter: blur(4px);
-    }
-    .modal-content {
-      background: #111; padding: 30px; border: 1px solid #d1b180;
-      color: white; max-width: 500px; width: 90%; position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-    }
-    .modal-close {
-      background: none; border: none; color: white; font-size: 24px;
-      cursor: pointer; position: absolute; top: 10px; right: 15px; line-height: 1;
+    /* --- ФОРМА ЗАКАЗА (ШИРОКАЯ) --- */
+    .order-form-wrapper {
+      width: 100%; margin: 0 auto;
+      padding: 50px; background: rgba(11, 11, 11, 0.6);
+      border: 1px solid rgba(209, 177, 128, 0.2);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      opacity: 0; transform: translateY(30px);
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+      margin-bottom: 60px; /* Отступ до футера */
     }
     .form-title {
-      font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
-      color: #d1b180; margin-top: 0; margin-bottom: 20px; text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; color: #fff; margin: 0 0 30px 0;
+      text-align: center;
     }
-    .form-group { margin-bottom: 16px; }
+    .form-group { margin-bottom: 25px; }
     .form-label {
-      display: block; color: #aaa; font-size: 0.9rem; margin-bottom: 6px;
+      display: block; font-family: 'Montserrat', sans-serif;
+      font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
     }
     .form-input, .form-textarea {
-      width: 100%; padding: 10px; background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2); color: white;
-      font-family: inherit; font-size: 1rem; border-radius: 4px; outline: none;
+      width: 100%; padding: 16px;
+      background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff; font-family: 'Montserrat', sans-serif; font-size: 1rem;
+      border-radius: 4px; outline: none; transition: all 0.3s ease;
     }
     .form-input:focus, .form-textarea:focus {
-      border-color: #d1b180; box-shadow: 0 0 8px rgba(209, 177, 128, 0.2);
+      border-color: #d1b180; box-shadow: 0 0 15px rgba(209, 177, 128, 0.2);
     }
     .form-textarea { resize: vertical; min-height: 140px; }
-    .submit-btn-modal {
-      width: 100%; padding: 14px; background: #d1b180; border: none;
-      color: #000; font-family: 'Cormorant Garamond', serif; font-weight: 600;
-      text-transform: uppercase; cursor: pointer; letter-spacing: 1px;
-      transition: transform 0.2s ease;
+
+    .submit-btn {
+      width: 100%; padding: 20px;
+      background: transparent; border: 1px solid #d1b180;
+      color: #d1b180; font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px;
+      cursor: pointer; transition: all 0.3s ease;
+      display: block; text-align: center;
     }
-    .submit-btn-modal:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(209, 177, 128, 0.4); }
-    #telegram-status {
-      margin-top: 18px; font-size: 0.95rem; text-align: center;
+    .submit-btn:hover {
+      background: #d1b180; color: #000;
+      box-shadow: 0 0 25px rgba(209, 177, 128, 0.4);
+    }
+    .submit-btn:disabled {
+      opacity: 0.6; cursor: not-allowed; filter: grayscale(1);
     }
 
-    /* Подвал */
-    .contact-footer {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 20px; padding: 40px; background: rgba(11, 11, 11, 0.6);
-      border-top: 1px solid rgba(255,255,255,0.05); opacity: 0;
-      animation: fadeIn 0.8s ease-out 1.1s forwards;
+    .status-message {
+      margin-top: 20px; font-size: 1rem; text-align: center;
+      min-height: 1.5em; font-weight: 500;
     }
-    .contacts-title { color: white; font-size: 1.3rem; margin-bottom: 20px; font-family: 'Cormorant Garamond', serif; }
-    .social-row-footer { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+    .status-success { color: #8bc34a; }
+    .status-error { color: #ff5252; }
+
+    /* Блок про платные правки */
+    .paid-edits-notice {
+      margin-bottom: 30px; padding: 20px; background: rgba(209, 177, 128, 0.08); 
+      border: 1px solid rgba(209, 177, 128, 0.2); border-radius: 8px; 
+      color: #d1b180; font-family: 'Cormorant Garamond', serif; text-align: center;
+    }
+
+    /* --- БЛОК КОНТАКТОВ (КАК НА СКРИНЕ) --- */
+    .contact-footer {
+      margin-top: auto; /* Прижимает к низу, если контента мало */
+      padding: 60px 0;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      opacity: 0; animation: fadeIn 0.8s ease-out 1.3s forwards;
+    }
+    .contacts-title { color: white; font-size: 1.5rem; margin-bottom: 30px; font-family: 'Cormorant Garamond', serif; }
+    .social-row-footer { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
     .contact-btn-footer {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255,255,255,0.1); color: white; text-decoration: none;      transition: all 0.3s ease; cursor: pointer;
+      width: 50px; height: 50px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white; text-decoration: none;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease; cursor: pointer;
     }
     .contact-btn-footer:hover {
       background: #d1b180; border-color: #d1b180; color: #000; transform: scale(1.1);
     }
-    .contact-email { margin-top: 20px; color: rgba(255,255,255,0.4); font-size: 0.95rem; }
-    .contact-email a { color: #d1b180; text-decoration: underline; }
+    .contact-email-text { margin-top: 30px; color: rgba(255,255,255,0.4); font-size: 1rem; }
+    .contact-email-text a { color: #d1b180; text-decoration: underline; }
 
-    @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { to { opacity: 1; } }
   </style>
 </head>
 <body>
   <div class="page-wrapper">
-    <!-- ЛЕВАЯ ПАНЕЛЬ -->
+    <!-- Сайдбар -->
     <aside class="sidebar">
       <div class="logo-wrapper">
-        <img src="img/logo.png" alt="Ель Миу Азхар" class="site-logo" onerror="this.style.display='none'" />
+        <img src="img/logo.png" alt="Логотип" class="site-logo" onerror="this.style.display='none'" />
       </div>
       <nav>
         <ul class="nav-list">
@@ -187,30 +202,33 @@
         </ul>
       </nav>
       <div class="social-row">
-        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn" title="Twitch">
-          <img src="img/twitch.png" alt="Twitch" />
+        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn">
+          <img src="img/twitch.png" alt="Twitch" onerror="this.style.display='none'" />
         </a>
-        <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn" title="Telegram">
-          <img src="img/telegram.png" alt="Telegram" />
+        <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn">
+          <img src="img/telegram.png" alt="Telegram" onerror="this.style.display='none'" />
         </a>
-        <a href="https://www.youtube.com/@elmiuazhar" target="_blank" class="social-icon-btn" title="YouTube">
-          <img src="img/youtube.png" alt="YouTube" />
+        <a href="https://www.youtube.com/@elmiuazhar" target="_blank" class="social-icon-btn">
+          <img src="img/youtube.png" alt="YouTube" onerror="this.style.display='none'" />
         </a>
-        <a href="https://www.tiktok.com/@elmiuazhar?is_from_webapp=1&sender_device=pc" target="_blank" class="social-icon-btn" title="TikTok">
-          <img src="img/tiktok.png" alt="TikTok" />
+        <a href="https://www.tiktok.com/@elmiuazhar?is_from_webapp=1&sender_device=pc" target="_blank" class="social-icon-btn">
+          <img src="img/tiktok.png" alt="TikTok" onerror="this.style.display='none'" />
         </a>
       </div>
     </aside>
 
-    <!-- ПРАВАЯ ЧАСТЬ (КОНТЕНТ) -->
+    <!-- Основной контент -->
     <main class="main-content">
       <h1 class="hero-title">Услуги и заказ</h1>
-
+      
+      <!-- БАННЕР СО СКИДКОЙ -->
       <div class="discount-banner">
         🔥 Сейчас действует скидка 60% на все услуги! Акция ограничена по времени (цены указаны БЕЗ скидки).
       </div>
 
+      <!-- БЛОК С ЦЕНАМИ -->
       <section class="price-section">
+        <!-- Карточка 1: VTuber модели -->
         <article class="price-card">
           <div>
             <h3>VTuber-модели</h3>
@@ -228,6 +246,7 @@
           <p class="note">Включает 2–3 ракурса, базовую анимацию глаз и рта, а также PSD-файл со слоями.</p>
         </article>
 
+        <!-- Карточка 2: Иллюстрации -->
         <article class="price-card">
           <div>
             <h3>Иллюстрации</h3>
@@ -248,55 +267,49 @@
       </section>
 
       <!-- Блок про платные правки -->
-      <div style="margin-bottom: 30px; padding: 20px; background: rgba(209, 177, 128, 0.08); border: 1px solid rgba(209, 177, 128, 0.2); border-radius: 8px; color: #d1b180; font-family: 'Cormorant Garamond', serif;">
+      <div class="paid-edits-notice">
         💵 Платные правки: каждая дополнительная правка стоит 10 €. Первые 2 правки — бесплатно.
       </div>
 
-      <!-- Кнопка вызова модального окна -->
-      <button type="button" class="btn-action" id="open-order-modal">Заказать работу</button>
-
-      <!-- Модальное окно: форма заказа -->
-      <div class="modal-overlay" id="payment-modal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:1000;backdrop-filter:blur(4px);">
-        <div class="modal-content" style="background:#111;padding:30px;border:1px solid #d1b180;color:white;max-width:500px;width:90%;position:relative;">
-          <button class="modal-close" id="close-payment" style="background:none;border:none;color:white;font-size:24px;cursor:pointer;position:absolute;top:10px;right:15px;line-height:1;">&times;</button>
-          <h2 style="color:#d1b180;margin-top:0;margin-bottom:20px;">Оформить заказ</h2>
-
-          <form id="order-form" style="margin-bottom:25px;">
-            <div style="margin-bottom:12px;">
-              <label style="display:block;color:#aaa;font-size:0.9rem;margin-bottom:6px;">Имя / ник</label>
-              <input type="text" name="name" required placeholder="Например: Саня" style="width:100%;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;box-sizing:border-box;">
-            </div>
-            <div style="margin-bottom:12px;">
-              <label style="display:block;color:#aaa;font-size:0.9rem;margin-bottom:6px;">Контакт (Telegram/VK/почта)</label>
-              <input type="text" name="contact" required placeholder="t.me/..." style="width:100%;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;box-sizing:border-box;">
-            </div>
-            <div style="margin-bottom:12px;">
-              <label style="display:block;color:#aaa;font-size:0.9rem;margin-bottom:6px;">Что нужно (кратко)</label>
-              <textarea name="request" rows="4" required placeholder="VTuber‑модель, иллюстрация, скетч — что именно и в каком стиле" style="width:100%;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;box-sizing:border-box;resize:vertical;"></textarea>
-            </div>
-            <button type="submit" style="background:#d1b180;border:none;color:#000;padding:12px 24px;font-family:'Cormorant Garamond',serif;font-weight:600;cursor:pointer;width:100%;text-transform:uppercase;">Отправить заказ</button>
-            <p id="telegram-status" style="margin-top:15px;font-size:0.9rem;text-align:center;"></p>
-          </form>
-        </div>
+      <!-- ШИРОКАЯ ФОРМА ЗАКАЗА (Google Sheets) -->
+      <div class="order-form-wrapper">
+        <h2 class="form-title">Оформить заказ</h2>
+        <form id="order-form">
+          <div class="form-group">
+            <label class="form-label">Имя / ник</label>
+            <input type="text" name="name" required placeholder="Например: Саня" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Контакт (Telegram/VK/почта)</label>
+            <input type="text" name="contact" required placeholder="t.me/..." class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Что нужно (кратко)</label>
+            <textarea name="request" rows="4" required placeholder="VTuber‑модель, иллюстрация, скетч — что именно и в каком стиле" class="form-textarea"></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Отправить заказ</button>
+          <p id="telegram-status" class="status-message"></p>
+        </form>
       </div>
 
+      <!-- БЛОК КОНТАКТОВ В КОНЦЕ (КАК НА СКРИНЕ) -->
       <footer class="contact-footer">
         <h2 class="contacts-title">Связаться со мной</h2>
         <div class="social-row-footer">
-          <a href="https://web.telegram.org/k/#@elmiuazhar" target="_blank" class="contact-btn-footer" title="Telegram">
+          <a href="https://web.telegram.org/k/#@elmiuazhar" target="_blank" class="contact-btn-footer">
             <img src="img/telegram.png" alt="Telegram" style="width:24px;height:24px;filter:brightness(0) invert(1);" />
           </a>
-          <a href="https://m.vk.com/id1121428857" target="_blank" class="contact-btn-footer" title="VK">
+          <a href="https://m.vk.com/id1121428857" target="_blank" class="contact-btn-footer">
             <img src="img/VK.png" alt="VK" style="width:24px;height:24px;filter:brightness(0) invert(1);" />
           </a>
-          <a href="mailto:elmiuazhar@gmail.com" class="contact-btn-footer" title="Email">
+          <a href="mailto:elmiuazhar@gmail.com" class="contact-btn-footer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px;height:24px;">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
           </a>
         </div>
-        <p class="contact-email">
+        <p class="contact-email-text">
           Или напишите на почту: <a href="mailto:elmiuazhar@gmail.com">elmiuazhar@gmail.com</a>
         </p>
       </footer>
@@ -306,7 +319,87 @@
   <!-- Звуки -->
   <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
   <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
+<div id="spark-container"></div>
+  <style>
+    #spark-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9998;
+    }
+    .spark {
+      position: absolute;
+      border-radius: 50%;
+      background: #d1b180;
+      box-shadow: 0 0 10px rgba(209, 177, 128, 0.8);
+      will-change: transform, opacity;
+    }
+  </style>
+  <script>
+    const container = document.getElementById('spark-container');
+    const MAX_SPARKS = 150;
+    const SPARK_SIZE = 4;
+    const SPEED_FACTOR = 0.6;
 
+    let mouseX = 0;
+    let mouseY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function spawnSparks() {
+      const count = 3;
+      for (let i = 0; i < count; i++) {
+        const spark = document.createElement('div');
+        spark.classList.add('spark');
+
+        const size = SPARK_SIZE * (0.5 + Math.random() * 1.5);
+        spark.style.width = `${size}px`;
+        spark.style.height = `${size}px`;
+
+        const offsetX = (Math.random() - 0.5) * 25;
+        const offsetY = (Math.random() - 0.5) * 25;
+        spark.style.left = `${mouseX + offsetX}px`;
+        spark.style.top = `${mouseY + offsetY}px`;
+
+        container.appendChild(spark);
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 80 + Math.random() * 60;
+        const vx = Math.cos(angle) * distance * SPEED_FACTOR;
+        const vy = Math.sin(angle) * distance * SPEED_FACTOR;
+
+        let progress = 0;
+        const duration = 600 + Math.random() * 400;
+
+        function animateSpark() {
+          progress += 1;
+          const t = Math.min(progress / duration, 1);
+          spark.style.transform = `translate(${vx * t}px, ${vy * t}px)`;
+          spark.style.opacity = 1 - t;
+
+          if (t < 1) {
+            requestAnimationFrame(animateSpark);
+          } else {
+            spark.remove();
+          }
+        }
+
+        animateSpark();
+
+        if (container.children.length > MAX_SPARKS) {
+          container.firstChild.remove();
+        }
+      }
+    }
+
+    setInterval(spawnSparks, 80);
+  </script>
   <script>
     // --- ЗВУКИ ---
     const soundClick = document.getElementById('sound-click');
@@ -324,9 +417,8 @@
       soundHover.play().catch(() => {});
     }
 
-    // Навешиваем звуки на все интерактивные элементы
     const interactiveElements = document.querySelectorAll(
-      'button, .submit-btn, .order-btn, .payment-btn, .nav-link, .social-icon-btn, .contact-btn-footer, .price-card, .btn-action, .modal-close'
+      'button, .submit-btn, .order-btn, .payment-btn, .nav-link, .social-icon-btn, .contact-btn-footer, .price-card'
     );
 
     interactiveElements.forEach(el => {
@@ -334,55 +426,53 @@
       el.addEventListener('mousedown', playClick);
     });
 
-    // --- МОДАЛЬНОЕ ОКНО ---
-    const modal = document.getElementById('payment-modal');
-    const openBtn = document.getElementById('open-order-modal');
-    const closeBtn = document.getElementById('close-payment');
-    const statusText = document.getElementById('telegram-status');
+    // --- ОТПРАВКА В GOOGLE SHEETS ---
     const form = document.getElementById('order-form');
+    const statusText = document.getElementById('telegram-status');
+    // Ссылка на твой скрипт Google Apps Script
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEmUyTjowIGxTA4QsjHJLPKRZ6GbXgHZCcE11OE7oY2yb0FTH1g3TtLqAAR3-M69jN/exec';
 
-    openBtn.addEventListener('click', () => {
-      modal.style.display = 'flex';
-    });
-
-    closeBtn.addEventListener('click', () => {
-      modal.style.display = 'none';
-      statusText.textContent = '';
-    });
-
-    window.addEventListener('click', (e) => {
-      if (e.target === modal) modal.style.display = 'none';
-    });
-
-    // --- ОТПРАВКА: делаем ссылку tg://msg и открываем чат ---
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const btn = e.target.querySelector('button[type="submit"]');
       const originalText = btn.textContent;
 
+      // Блокируем кнопку
       btn.disabled = true;
-      btn.textContent = 'Открываю чат...';
+      btn.textContent = 'Отправка...';
       statusText.textContent = '';
+      statusText.className = 'status-message';
 
       const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      // Формируем сообщение для Telegram
-      const message = encodeURIComponent(
-        '📩 Новый заказ!\n\n' +
-        '👤 Имя/ник: ' + data.name + '\n' +
-        '📞 Контакт: ' + data.contact + '\n' +
-        '📝 Что нужно: ' + data.request
-      );
-
-      // Ссылка tg://msg?to=... открывает Telegram и сразу подставляет текст
-      const tgLink = `tg://msg?to=@elmiuazhar&text=${message}`;
-
-      setTimeout(() => {
-        window.location.href = tgLink;
-        btn.disabled = false;
-        btn.textContent = originalText;
-      }, 500);
+      
+      // ВАЖНО: Имена полей (name, contact, request) должны совпадать с заголовками в первой строке Google Таблицы
+      // Если в таблице заголовки другие (например, "Имя", "Контакт"), нужно переименовать name/contact/request здесь
+      
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if(response.ok) {
+          statusText.textContent = '✅ Заказ успешно отправлен!';
+          statusText.classList.add('status-success');
+          form.reset();
+        } else {
+          throw new Error('Ошибка сети');
+        }
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        statusText.textContent = '❌ Не удалось отправить. Попробуйте позже или напишите напрямую.';
+        statusText.classList.add('status-error');
+      })
+      .finally(() => {
+        // Возвращаем кнопку в исходное состояние через 2 секунды
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }, 2000);
+      });
     });
   </script>
 </body>
