@@ -315,6 +315,57 @@
       </footer>
     </main>
   </div>
+      <!-- БЛОК ЗАКАЗОВ С ЛИМИТОМ 10 -->
+      <section class="orders-section">
+        <h2 class="form-title" style="margin-bottom: 20px;">Текущие заказы</h2>
+
+        <!-- Статус лимита: по умолчанию скрыт -->
+        <div id="orders-limit-warning" class="limit-warning" style="
+          display: none;
+          padding: 20px;
+          background: rgba(209, 177, 128, 0.15);
+          border: 1px solid rgba(209, 177, 128, 0.3);
+          color: #d1b180;
+          font-family: 'Cormorant Garamond', serif;
+          text-align: center;
+          margin-bottom: 30px;
+          box-shadow: 0 4px 15px rgba(209, 177, 128, 0.1);
+          font-size: 1.1rem;
+        ">
+          ⚠️ Лимит заказов переполнен. Новые заказы временно не принимаются.
+        </div>
+
+        <table class="orders-table" style="
+          width: 100%;
+          border-collapse: collapse;
+          color: rgba(255,255,255,0.7);
+          font-size: 0.95rem;
+          opacity: 0;
+          transform: translateY(20px);
+          animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.4s forwards;
+        ">
+          <thead>
+            <tr style="border-bottom: 2px solid rgba(255,255,255,0.1);">
+              <th style="text-align: left; padding: 12px 16px; color: #d1b180;">№</th>
+              <th style="text-align: left; padding: 12px 16px; color: #d1b180;">Заказчик</th>
+              <th style="text-align: left; padding: 12px 16px; color: #d1b180;">Услуга</th>
+              <th style="text-align: right; padding: 12px 16px; color: #d1b180;">Статус</th>
+            </tr>
+          </thead>
+          <tbody id="orders-list">
+            <tr><td>1</td><td>Принт на машину</td><td>Скетч / 3d-test</td><td style="text-align:right; color:#e0ff2d;">Ожидание ответа от заказщика</td></tr>
+          </tbody>
+        </table>
+
+        <p style="
+          margin-top: 15px;
+          color: rgba(255,255,255,0.4);
+          font-size: 0.85rem;
+          text-align: center;
+        ">
+          Лимит: максимум 10 активных заказов. Если лимит достигнут, новые заказы временно не принимаются.
+        </p>
+      </section>
 
   <!-- Звуки -->
   <audio id="sound-click" src="sounds/tik.mp3" preload="auto"></audio>
