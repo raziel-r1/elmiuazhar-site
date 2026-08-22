@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <link rel="icon" type="img/logo.png" href="img/logo.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Обо мне — Ель Миу Азхар</title>
@@ -252,15 +253,143 @@
     }
 
     @media (max-width: 768px) {
-      .page-wrapper { flex-direction: column; }
-      .sidebar { width: 100%; height: auto; padding: 20px; flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; order: -1; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
-      .logo-wrapper { margin-bottom: 0; order: 1; }
-      .nav-list { flex-direction: row; gap: 15px; margin-top: 10px; flex-grow: 1; justify-content: center; order: 2; }
-      .social-row { margin-top: 0; justify-content: center; width: 100%; order: 3; }
-      .main-content { padding: 30px 20px; }
-      .hero-title { font-size: 2.2rem; }
-      .skills-grid { grid-template-columns: 1fr; }
-    }
+  /* 1. Превращаем сайдбар в компактную шапку сверху */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    min-height: 65px; /* Чуть выше, чтобы всё красиво влезло */
+    padding: 10px 15px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: nowrap; /* Важно: не даем элементам прыгать вниз */
+    overflow-x: auto; /* ГЛАВНОЕ: включаем прокрутку самой шапки */
+    scrollbar-width: none; /* Скрываем полосу прокрутки в Firefox */
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none; /* Скрываем полосу прокрутки в Chrome/Safari */
+  }
+
+  /* 2. Логотип: маленький и круглый */
+  .logo-wrapper {
+    order: 1;
+    width: 44px;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    filter: drop-shadow(0 0 5px rgba(209, 177, 128, 0.3));
+  }
+
+  /* 3. Соцсети: компактно */
+  .social-row {
+    order: 2;
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .social-icon-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .social-icon-btn img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+
+  /* 4. Меню: делаем его прокручиваемым внутри шапки */
+  .sidebar nav {
+    order: 3;
+    width: auto;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .nav-list {
+    display: flex;
+    flex-direction: row;
+    gap: 24px; /* Расстояние между пунктами меню */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto; /* Разрешаем скролл внутри списка */
+    scrollbar-width: none;
+    padding-bottom: 8px; /* Отступ снизу, чтобы текст не прилипал к скроллу */
+  }
+  
+  .nav-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    white-space: nowrap; /* Запрещаем перенос текста ссылки */
+    padding: 0;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .nav-link:hover, .nav-link.active {
+    color: #d1b180;
+    padding-left: 0; /* Убираем сдвиг на мобильном */
+  }
+
+  /* 5. Скрываем большие серые кнопки контактов в блоке .contact-block */
+  .contact-block {
+    display: none; 
+  }
+
+  /* 6. Подстройка основного контента */
+  .page-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 75px); /* Высота: весь экран минус высота шапки */
+  }
+
+  /* 7. Адаптив заголовков и карточек */
+  .hero-title {
+    font-size: 1.8rem;
+    line-height: 1.2;
+  }
+
+  .blocks-row {
+    margin-top: 30px;
+    flex-direction: column;
+  }
+
+  .square-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+}
+
   </style>
 </head>
 <body>
