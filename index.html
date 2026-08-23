@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <link rel="icon" type="img/logo.png" href="img/logo.png">
+  <link rel="icon" type="image/png" href="img/logo.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ель Миу Азхар — Любитель кролей</title>
@@ -15,18 +15,65 @@
   <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
 
   <style>
+    /* --- ФОНОВОЕ ВИДЕО (нижний слой) --- */
+    .video-background {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -100;
+      overflow: hidden;
+      opacity: 0,90;
+      background-color: #050505;
+    }
+    #bg-video {
+      position: absolute;
+      top: 50%; left: 50%;
+      min-width: 100%; min-height: 100%;
+      width: auto; height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      display: block;
+    }
+    .dark-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.55); /* подбери под себя: 0.4–0.65 */
+      z-index: 5;                       /* выше видео, но ниже контента */
+      pointer-events: none; 
+}
+    /* --- ВЕРХНЕЕ ПОЛУПРОЗРАЧНОЕ ВИДЕО (слой поверх фона) --- */
+    .video-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -90; /* между фоном и оверлеем, но ниже контента */
+      overflow: hidden;
+      pointer-events: none;
+    }
+    #overlay-video {
+      position: absolute;
+      top: 50%; left: 50%;
+      min-width: 100%; min-height: 100%;
+      width: auto; height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      display: block;
+      opacity: 0.35; /* прозрачность верхнего видео */
+    }
+
+    /* Отключаем оба видеофона на мобильных */
+    @media (max-width: 768px) {
+      .video-background, .video-overlay { display: none; }
+      body { background-color: #050505; }
+    }
+
     body { 
       margin: 0; padding: 0; height: 100vh; overflow-x: hidden; 
       display: flex; flex-direction: column; font-family: 'Montserrat', sans-serif; 
-      color: #fff; box-sizing: border-box; 
-      background-image: url('img/fone_1.png');
-      background-size: cover; background-position: center;
-      background-attachment: fixed; background-repeat: no-repeat;
+      color: #fff; box-sizing: border-box;
     }
 
     .bg-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background-color: rgba(5, 5, 5, 0.6); z-index: 1; pointer-events: none;
+      background-color: rgba(5, 5, 5, 0.719); z-index: 1; pointer-events: none;
     }
 
     * { box-sizing: border-box; }
@@ -129,12 +176,14 @@
     }
     
     .hero-desc { 
-      color: rgba(255, 255, 255, 0.6); font-size: 1.1rem; 
+      color: rgba(255, 255, 255, 0.904); font-size: 1.1rem; 
       margin-bottom: 40px; max-width: 600px; line-height: 1.6; 
     }
     
     .btn-action { 
-      background: transparent; border: 1px solid #d1b180; color: #d1b180; 
+      background: rgba(212, 181, 124, 0.575);
+      border: 1px solid #8b7250;
+      color: #f8f6f2;
       padding: 15px 40px; font-family: 'Cormorant Garamond', serif; 
       font-size: 1rem; text-transform: uppercase; cursor: pointer; 
       transition: all 0.3s ease; letter-spacing: 2px; 
@@ -143,8 +192,8 @@
     }
     
     .btn-action:hover { 
-      background: #d1b180; color: #000; 
-      box-shadow: 0 0 20px rgba(209, 177, 128, 0.4); 
+      background: rgb(187, 161, 122); color: #fff; 
+      box-shadow: 0 0 20px rgba(139, 114, 80, 0.4); 
     }
     
     .contact-block { 
@@ -165,42 +214,43 @@
     
     .contact-btn-stack { 
       display: block; width: 100%; max-width: 260px; padding: 12px 0; 
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
-      color: #d1b180; text-align: center; text-decoration: none; 
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #ac8c47;
+      color: #ccc;
+      text-align: center; text-decoration: none; 
       text-transform: uppercase; font-family: 'Montserrat', sans-serif; 
       font-size: 0.8rem; letter-spacing: 1px; transition: all 0.3s ease; 
       cursor: pointer; 
     }
     
     .contact-btn-stack:hover { 
-      background: #d1b180; color: #000; border-color: #d1b180; 
+      background: rgb(187, 161, 122); color: #fff; border-color: #8b7250; 
     }
     
     .blocks-row { 
       display: flex; 
-      justify-content: space-between; /* Ключевое: распределяет блоки по всей ширине */
+      justify-content: space-between;
       gap: 10px; 
-      margin-top: 140px; 
+      margin-top: 190px; 
       flex-wrap: wrap; 
     }
 
     .square-card { 
-      flex: 1 1 300px; /* Базовая ширина 300px, но не меньше */
-      max-width: 450px; /* Максимальная ширина, чтобы не растягивались */
-      background: rgba(255, 255, 255, 0.03); 
-      border: 1px solid rgba(209, 177, 128, 0.1); 
+      flex: 1 1 300px;
+      max-width: 450px;
+      background: rgba(10, 10, 10, 0.5);
+      border: 1px solid #333;
       padding: 30px; 
-      height: 100%; /* Растягивает карточку по высоте родителя */
+      height: 100%;
       display: flex; 
       flex-direction: column; 
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
       opacity: 0; 
       transform: translateY(200px); 
       cursor: pointer; 
-      box-sizing: border-box; /* Важно: padding не увеличивает ширину */
+      box-sizing: border-box;
     }
 
-/* Анимации появления */
     .square-card:nth-child(1) { animation: fadeInUp 0.6s ease forwards 1.3s; }
     .square-card:nth-child(2) { animation: fadeInUp 0.6s ease forwards 1.5s; }
     .square-card:nth-child(3) { animation: fadeInUp 0.6s ease forwards 1.7s; }
@@ -208,214 +258,225 @@
     .square-card:hover { 
       transform: translateY(-10px) scale(1.02); 
       border-color: #d1b180; 
-      background: rgba(209, 177, 128, 0.05); 
+      background: rgba(139, 114, 80, 0.15); 
     }
 
     .square-card h3 { 
       color: #d1b180; 
       margin-top: 15px; 
       margin-bottom: 10px; 
-      flex-grow: 0; /* Заставляет заголовок прижимать текст вниз */
+      flex-grow: 0;
       font-family: 'Cormorant Garamond', serif; 
       font-size: 1.2rem;
     }
 
     .square-card p { 
-      color: rgba(255, 255, 255, 0.6); 
+      color: rgba(255, 255, 255, 0.65);
       font-size: 0.9rem; 
       margin: 0; 
       line-height: 1.5; 
     }
-
     
     @keyframes fadeInDown { to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
     
     body::-webkit-scrollbar { display: none; }
     body { scrollbar-width: none; -ms-overflow-style: none; }
-    
     @media (max-width: 768px) {
-  /* --- ШАПКА (оставляем как есть: компактная, со скроллом) --- */
-  .sidebar {
-    width: 100%;
-    height: auto;
-    min-height: 65px;
-    padding: 10px 15px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        min-height: 65px;
+        padding: 10px 15px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
 
-  .sidebar::-webkit-scrollbar {
-    display: none;
-  }
+      .sidebar::-webkit-scrollbar {
+        display: none;
+      }
 
-  .logo-wrapper {
-    order: 1;
-    width: 44px;
-    flex-shrink: 0;
-    margin: 0;
-    padding: 0;
-  }
+      .logo-wrapper {
+        order: 1;
+        width: 44px;
+        flex-shrink: 0;
+        margin:
 
-  .site-logo {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-    filter: drop-shadow(0 0 5px rgba(209, 177, 128, 0.3));
-  }
+       0;
+        padding: 0;
+      }
 
-  .social-row {
-    order: 2;
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-  }
+      .site-logo {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        filter: drop-shadow(0 0 5px rgba(209, 177, 128, 0.3));
+      }
 
-  .social-icon-btn {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border-radius: 50%;
-  }
+      .social-row {
+        order: 2;
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+      }
 
-  .social-icon-btn img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-  }
+      .social-icon-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border-radius: 50%;
+      }
 
-  .sidebar nav {
-    order: 3;
-    width: auto;
-    margin: 0;
-    flex-grow: 1;
-  }
+      .social-icon-btn img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
 
-  .nav-list {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 8px;
-  }
-  
-  .nav-list::-webkit-scrollbar {
-    display: none;
-  }
+      .sidebar nav {
+        order: 3;
+        width: auto;
+        margin: 0;
+        flex-grow: 1;
+      }
 
-  .nav-link {
-    white-space: nowrap;
-    padding: 0;
-    letter-spacing: 1px;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
-  }
+      .nav-list {
+        display: flex;
+        flex-direction: row;
+        gap: 24px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding-bottom: 8px;
+      }
+      
+      .nav-list::-webkit-scrollbar {
+        display: none;
+      }
 
-  .nav-link:hover, .nav-link.active {
-    color: #d1b180;
-    padding-left: 0;
-  }
+      .nav-link {
+        white-space: nowrap;
+        padding: 0;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.6);
+      }
 
-  /* --- СКРЫВАЕМ ГРОМОЗДКИЕ КНОПКИ СНИЗУ --- */
-  .contact-block {
-    display: none;
-  }
+      .nav-link:hover, .nav-link.active {
+        color: #d1b180;
+        padding-left: 0;
+      }
 
-  /* --- ПОДГОНКА КОНТЕНТА --- */
-  .page-wrapper {
-    flex-direction: column;
-    height: auto;
-  }
+      /* Скрываем громоздкие блоки на мобильном */
+      .contact-block {
+        display: none;
+      }
 
-  .main-content {
-    width: 100%;
-    padding: 15px;
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: calc(100vh - 75px);
-  }
+      .page-wrapper {
+        flex-direction: column;
+        height: auto;
+      }
 
-  .hero-title {
-    font-size: 2rem;
-    line-height: 1.2;
-    margin-bottom: 15px;
-  }
+      .main-content {
+        width: 100%;
+        padding: 15px;
+        flex-grow: 1;
+        overflow-y: auto;
+        max-height: calc(100vh - 75px);
+      }
 
-  .hero-desc {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
+      .hero-title {
+        font-size: 2rem;
+        line-height: 1.2;
+        margin-bottom: 15px;
+      }
 
-  .btn-action {
-    padding: 12px 30px;
-    font-size: 0.9rem;
-    letter-spacing: 1.5px;
-  }
+      .hero-desc {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
 
-  /* --- КАРТОЧКИ: КОМПАКТНЕЕ ПО ВЫСОТЕ И ШИРИНЕ --- */
-  .blocks-row {
-    margin-top: 25px;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px; /* Чуть меньше расстояние между карточками */
-  }
+      .btn-action {
+        padding: 12px 30px;
+        font-size: 0.9rem;
+        letter-spacing: 1.5px;
+        /* на мобильном рамки и цвета остаются теми же — они уже затемнены */
+      }
 
-  .square-card {
-    width: 100%;
-    max-width: 480px;
-    padding: 12px 16px; /* Сильно уменьшили внутренние отступы (было 20px+) */
-    height: auto;
-    border: 1px solid rgba(209, 177, 128, 0.1);
-    box-sizing: border-box;
-  }
+      .blocks-row {
+        margin-top: 25px;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
 
-  .square-card h3 {
-    font-size: 2rem; /* Чуть меньше заголовок */
-    margin-top: 10px;
-    margin-bottom: 6px; /* Меньше места под заголовок */
-    line-height: 1.2;
-  }
+      .square-card {
+        width: 100%;
+        max-width: 480px;
+        padding: 12px 16px;
+        height: auto;
+        border: 1px solid #333; /* тёмная рамка */
+        box-sizing: border-box;
+      }
 
-  .square-card p {
-    font-size: 1.25rem; /* Чуть меньше текст описания */
-    line-height: 1.4;
-    margin: 0;
-  }
+      .square-card h3 {
+        font-size: 1.4rem;
+        margin-top: 10px;
+        margin-bottom: 6px;
+        line-height: 1.2;
+      }
 
-  /* Анимации оставляем, но они теперь проигрываются на более компактных блоках */
-  .square-card:nth-child(1) { animation: fadeInUp 0.5s ease forwards 0.3s; }
-  .square-card:nth-child(2) { animation: fadeInUp 0.5s ease forwards 0.5s; }
-  .square-card:nth-child(3) { animation: fadeInUp 0.5s ease forwards 0.7s; }
-}
+      .square-card p {
+        font-size: 1rem;
+        line-height: 1.4;
+        margin: 0;
+      }
 
+      .square-card:nth-child(1) { animation: fadeInUp 0.5s ease forwards 0.3s; }
+      .square-card:nth-child(2) { animation: fadeInUp 0.5s ease forwards 0.5s; }
+      .square-card:nth-child(3) { animation: fadeInUp 0.5s ease forwards 0.7s; }
+    }
   </style>
 </head>
 <body class="bg-home">
   
-  <div class="bg-overlay"></div>
+  <!-- Фоновое видео (работает только на десктопе) -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline id="bg-video">
+      <source src="img/back.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Полупрозрачный оверлей поверх видео -->
+  <div class="video-overlay">
+      <video autoplay muted loop playsinline id="bg-video">
+      <source src="img/overlay.webm" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="dark-overlay"></div>
+
 
   <div class="page-wrapper">
     <aside class="sidebar">
       <div class="logo-wrapper">
         <img src="img/logo.png" alt="Ель Миу Азхар" class="site-logo" onerror="this.style.display='none'">
       </div>
-        <nav>
+      <nav>
         <ul class="nav-list">
           <li><a href="index.html" class="nav-link active">Главная</a></li>
           <li><a href="gallery.html" class="nav-link">Галерея</a></li>
@@ -428,7 +489,7 @@
       </nav>
       
       <div class="social-row">
-        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn" aria-label="Twitch" title="Twitch">
+        <a href="https://www.twitch.tv/kukolnik690028" target="_blank" class="social-icon-btn" aria-label="Twitch" title="Twitch">
           <img src="img/twitch.png" alt="Twitch" loading="lazy" onerror="this.style.display='none'">
         </a>
         <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn" aria-label="Telegram" title="Telegram">
@@ -445,7 +506,7 @@
 
     <main class="main-content">
       <div class="hero-section">
-        <h1 class="hero-title">Кроличьи нашествия - искусство лапками</h1>
+        <h1 class="hero-title">Кроличьи нашествия — искусство лапками</h1>
         <p class="hero-desc">Я создаю персонажей, VTuber‑модели и иллюстрации.</p>
         <p class="hero-desc">Character Artist / Character Designer
 + Visual Storyteller
@@ -455,12 +516,11 @@
 
       <div class="contact-block">
         <div class="contact-heading">
-          Связь и условия заказа скидывать сюда: <span>Связь</span>
+          Связь и условия заказа скидывать сюда: <span>Gmail: elmiuazhar@gmail.com</span>
         </div>
         <div class="contact-buttons-stack">
           <a href="https://m.vk.com/id1121428857" target="_blank" class="contact-btn-stack">VK</a>
           <a href="https://web.telegram.org/k/#@elmiuazhar" target="_blank" class="contact-btn-stack">Telegram</a>
-          <a href="mailto:elmiuazhar@gmail.com" class="contact-btn-stack">Email</a>
         </div>
       </div>
 
@@ -500,7 +560,7 @@
           <label style="display:block;color:#aaa;font-size:0.9rem;margin-bottom:6px;">Что нужно (кратко)</label>
           <textarea name="request" rows="4" required placeholder="VTuber‑модель, иллюстрация, скетч — что именно и в каком стиле" style="width:100%;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;box-sizing:border-box;resize:vertical;"></textarea>
         </div>
-        <button type="submit" style="background:#d1b180;border:none;color:#000;padding:12px 24px;font-family:'Cormorant Garamond',serif;font-weight:600;cursor:pointer;width:100%;text-transform:uppercase;">Отправить заказ</button>
+        <button type="submit" style="background:#8b7250;border:none;color:#fff;padding:12px 24px;font-family:'Cormorant Garamond',serif;font-weight:600;cursor:pointer;width:100%;text-transform:uppercase;">Отправить заказ</button>
         <p id="telegram-status" style="margin-top:15px;font-size:0.9rem;text-align:center;"></p>
       </form>
     </div>

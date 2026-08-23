@@ -4,7 +4,7 @@
   <link rel="icon" type="img/logo.png" href="img/logo.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Услуги и заказ — Ель Миу Азхар</title>
+  <title>Услуги и заказы — Ель Миу Азхар</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +15,31 @@
   <audio id="sound-hover" src="sounds/navodka.mp3" preload="auto"></audio>
 
   <style>
+        /* --- ФОНОВОЕ ВИДЕО (нижний слой) --- */
+    .video-background {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -100;
+      overflow: hidden;
+      opacity: 0,90;
+      background-color: #050505;
+    }
+    #bg-video {
+      position: absolute;
+      top: 50%; left: 50%;
+      min-width: 100%; min-height: 100%;
+      width: auto; height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      display: block;
+    }
+    .dark-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.178); /* подбери под себя: 0.4–0.65 */
+      z-index: 5;                       /* выше видео, но ниже контента */
+      pointer-events: none; 
+    }
     /* --- БАЗА --- */
     body {
       margin: 0; padding: 0; height: 100vh; overflow-x: hidden;
@@ -185,6 +210,8 @@
   </style>
 </head>
 <body>
+  
+  
   <div class="page-wrapper">
     <!-- Сайдбар -->
     <aside class="sidebar">
@@ -203,7 +230,7 @@
         </ul>
       </nav>
       <div class="social-row">
-        <a href="https://www.twitch.tv/miumiu690028" target="_blank" class="social-icon-btn">
+        <a href="https://www.twitch.tv/kukolnik690028" target="_blank" class="social-icon-btn">
           <img src="img/twitch.png" alt="Twitch" onerror="this.style.display='none'" />
         </a>
         <a href="https://t.me/MIUMIU690028" target="_blank" class="social-icon-btn">
